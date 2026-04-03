@@ -333,6 +333,12 @@ button {
   background: rgba(255, 255, 255, 0.08);
 }
 
+.button--ghost-dark {
+  border: 1px solid rgba(32, 77, 54, 0.28);
+  color: var(--accent);
+  background: rgba(32, 77, 54, 0.05);
+}
+
 .gallery {
   margin-top: -54px;
   position: relative;
@@ -456,6 +462,10 @@ button {
 .cards-intro {
   max-width: 720px;
   margin-bottom: 32px;
+}
+
+.section-link {
+  margin-top: 24px;
 }
 
 .cards-intro--center {
