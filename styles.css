@@ -312,6 +312,10 @@ button {
   z-index: 3;
 }
 
+.market-tiles {
+  padding-top: 26px;
+}
+
 .market-cta__inner {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
