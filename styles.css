@@ -607,6 +607,39 @@ button {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.enjoy-grid--photo {
+  gap: 24px;
+}
+
+.enjoy-card {
+  overflow: hidden;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.enjoy-card img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.enjoy-card__body {
+  padding: 18px 20px 22px;
+}
+
+.enjoy-card__body h3 {
+  margin: 0 0 10px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.enjoy-card__body p {
+  margin: 0;
+  color: var(--muted);
+}
+
 .research-card {
   padding: 28px;
   background: var(--surface);
