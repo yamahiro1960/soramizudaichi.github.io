@@ -420,7 +420,6 @@ button {
 }
 
 .feature-cards,
-.variety-grid,
 .story-grid,
 .faq-grid {
   display: grid;
@@ -483,9 +482,137 @@ button {
   font-size: 0.9rem;
 }
 
-.variety-grid,
 .story-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.research-stack {
+  display: grid;
+  gap: 22px;
+}
+
+.research-grid,
+.enjoy-grid,
+.qa-categories,
+.farm-log {
+  display: grid;
+  gap: 20px;
+}
+
+.research-grid,
+.enjoy-grid,
+.qa-categories {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.research-card {
+  padding: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.research-card--wide {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.research-card__label,
+.farm-entry__date {
+  margin: 0 0 8px;
+  color: var(--accent-warm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.research-card h3,
+.qa-category h3,
+.farm-entry h3 {
+  margin: 0 0 14px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+.research-card p,
+.farm-entry p,
+.qa-item p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.research-card__media img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: linear-gradient(180deg, rgba(255, 250, 241, 0.98), rgba(232, 240, 223, 0.78));
+}
+
+.research-note {
+  padding: 24px 28px;
+  border-left: 4px solid var(--accent);
+  background: rgba(255, 250, 241, 0.92);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.qa-category {
+  padding: 24px;
+  background: rgba(255, 250, 241, 0.8);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.qa-category h3 {
+  font-size: 1.25rem;
+}
+
+.qa-item {
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+
+.qa-item:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.qa-item summary {
+  cursor: pointer;
+  list-style: none;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.5;
+}
+
+.qa-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.qa-item p {
+  margin-top: 10px;
+}
+
+.farm-log {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.farm-entry {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.farm-entry__media img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 .variety-card,
@@ -566,13 +693,20 @@ button {
 
 @media (max-width: 960px) {
   .feature-cards,
-  .variety-grid,
   .story-grid,
   .faq-grid,
+  .research-grid,
+  .enjoy-grid,
+  .qa-categories,
+  .farm-log,
   .gallery,
   .section__grid,
   .benefit-layout,
   .closing {
+    grid-template-columns: 1fr;
+  }
+
+  .research-card--wide {
     grid-template-columns: 1fr;
   }
 
