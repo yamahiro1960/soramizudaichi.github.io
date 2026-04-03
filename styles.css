@@ -145,6 +145,11 @@ button {
   transform: scaleX(1);
 }
 
+.site-nav a[aria-current="page"]::after,
+.site-footer__nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
 .menu-toggle {
   display: none;
   border: 0;
@@ -190,6 +195,45 @@ button {
   min-height: min(92vh, 880px);
   display: grid;
   align-items: end;
+}
+
+.page-hero {
+  position: relative;
+  overflow: hidden;
+  min-height: 320px;
+  display: grid;
+  align-items: end;
+}
+
+.page-hero__backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(15, 24, 18, 0.38), rgba(15, 24, 18, 0.72)),
+    url("assets/images/hero.jpg") center 35%/cover no-repeat;
+}
+
+.page-hero__content {
+  position: relative;
+  color: #fff;
+  padding: 150px 0 64px;
+}
+
+.page-hero__content h1 {
+  margin: 0 0 14px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  line-height: 1.15;
+}
+
+.page-hero__content p:last-child {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.page-main {
+  padding-top: 72px;
 }
 
 .hero__backdrop {
@@ -712,6 +756,14 @@ button {
 
   .gallery {
     margin-top: -36px;
+  }
+
+  .page-hero {
+    min-height: 260px;
+  }
+
+  .page-hero__content {
+    padding: 122px 0 48px;
   }
 
   .gallery__item,
