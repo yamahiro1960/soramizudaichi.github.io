@@ -1153,6 +1153,12 @@ button {
 .variety-card h3,
 .story-card h3 {
   padding: 0 20px 24px;
+  text-align: center;
+}
+
+.story-card p {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .story-note {
