@@ -299,19 +299,33 @@ button {
 }
 
 .gallery__item {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow);
-  background: #ddd;
+  background: var(--surface-strong);
+  border: 1px solid rgba(31, 42, 31, 0.08);
 }
 
 .gallery__item img {
+  width: 100%;
   height: 100%;
-  object-fit: cover;
+  min-height: 280px;
+  object-fit: contain;
+  background: linear-gradient(180deg, rgba(255, 250, 241, 0.98), rgba(232, 240, 223, 0.78));
 }
 
 .gallery__item--tall {
   min-height: 420px;
+}
+
+.gallery__item figcaption {
+  padding: 16px 20px 18px;
+  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
+  font-size: 1.05rem;
+  color: var(--accent);
+  background: rgba(255, 250, 241, 0.96);
 }
 
 .section {
@@ -558,6 +572,10 @@ button {
   .gallery__item,
   .gallery__item--tall {
     min-height: 260px;
+  }
+
+  .gallery__item img {
+    min-height: 240px;
   }
 
   .feature-cards {
