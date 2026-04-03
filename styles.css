@@ -306,6 +306,50 @@ button {
   margin-top: 34px;
 }
 
+.market-cta {
+  margin-top: -28px;
+  position: relative;
+  z-index: 3;
+}
+
+.market-cta__inner {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.market-button {
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1px solid rgba(31, 42, 31, 0.18);
+  background: rgba(255, 250, 241, 0.94);
+  box-shadow: 0 10px 24px rgba(23, 32, 19, 0.12);
+  font-weight: 700;
+  color: var(--accent);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.market-button:hover,
+.market-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(23, 32, 19, 0.16);
+}
+
+.market-button--mercari {
+  border-color: rgba(232, 77, 94, 0.28);
+}
+
+.market-button--amazon {
+  border-color: rgba(255, 153, 0, 0.38);
+}
+
+.market-button--base {
+  border-color: rgba(32, 77, 54, 0.34);
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -746,6 +790,10 @@ button {
 }
 
 @media (max-width: 960px) {
+  .market-cta__inner {
+    grid-template-columns: 1fr;
+  }
+
   .feature-cards,
   .story-grid,
   .faq-grid,
