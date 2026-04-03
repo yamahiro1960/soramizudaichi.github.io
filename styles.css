@@ -765,8 +765,8 @@ button {
 }
 
 .paper-card {
-  border: 1px solid #cfd8e3;
-  border-left: 6px solid #0f69c5;
+  border: 1px solid #c8d6cb;
+  border-left: 6px solid #2c5f46;
   background: #ffffff;
   box-shadow: 0 12px 30px rgba(18, 32, 51, 0.08);
 }
@@ -792,7 +792,7 @@ button {
 }
 
 .paper-card__url {
-  color: #0f69c5;
+  color: #1f5b3f;
   font-weight: 700;
   font-size: 0.9rem;
 }
@@ -812,10 +812,10 @@ button {
 .paper-card__summary {
   margin: 0;
   padding: 18px 24px;
-  border-top: 1px solid #d8e0ea;
-  border-bottom: 1px solid #d8e0ea;
-  background: #eef5fd;
-  color: #0f69c5;
+  border-top: 1px solid #d4e0d6;
+  border-bottom: 1px solid #d4e0d6;
+  background: #edf4ee;
+  color: #1f5b3f;
 }
 
 .paper-card__grid {
@@ -825,8 +825,8 @@ button {
 
 .paper-cell {
   padding: 18px 24px 20px;
-  border-right: 1px solid #d8e0ea;
-  border-bottom: 1px solid #d8e0ea;
+  border-right: 1px solid #d4e0d6;
+  border-bottom: 1px solid #d4e0d6;
 }
 
 .paper-cell:nth-child(2n) {
@@ -835,7 +835,7 @@ button {
 
 .paper-cell h3 {
   margin: 0 0 10px;
-  color: #0f69c5;
+  color: #1f5b3f;
   font-size: 1.55rem;
   font-family: "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
 }
@@ -852,7 +852,7 @@ button {
 }
 
 .paper-cell--accent p {
-  color: #0f4fa3;
+  color: #1b4a34;
   font-weight: 700;
 }
 
