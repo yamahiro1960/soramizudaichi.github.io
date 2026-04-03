@@ -421,12 +421,17 @@ button {
 
 .feature-cards,
 .variety-grid,
-.story-grid {
+.story-grid,
+.faq-grid {
   display: grid;
   gap: 20px;
 }
 
 .feature-cards {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.faq-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
@@ -441,6 +446,11 @@ button {
 
 .feature-card {
   padding: 30px 26px;
+}
+
+.faq-card p {
+  margin: 0;
+  color: var(--muted);
 }
 
 .feature-card__icon {
@@ -558,6 +568,7 @@ button {
   .feature-cards,
   .variety-grid,
   .story-grid,
+  .faq-grid,
   .gallery,
   .section__grid,
   .benefit-layout,
