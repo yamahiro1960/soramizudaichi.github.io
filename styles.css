@@ -210,7 +210,7 @@ button {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(15, 24, 18, 0.38), rgba(15, 24, 18, 0.72)),
-    url("assets/images/hero.jpg") center 35%/cover no-repeat;
+    url("assets/images/home/hero.jpg") center 35%/cover no-repeat;
 }
 
 .page-hero__content {
@@ -241,7 +241,7 @@ button {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(15, 24, 18, 0.18), rgba(15, 24, 18, 0.74)),
-    url("assets/images/hero.jpg") center/cover no-repeat;
+    url("assets/images/home/hero.jpg") center/cover no-repeat;
   transform: scale(1.04);
 }
 
@@ -602,9 +602,12 @@ button {
 }
 
 .research-grid,
-.enjoy-grid,
 .qa-categories {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.enjoy-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .enjoy-grid--photo {
