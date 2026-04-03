@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <rect width="1200" height="900" fill="#fbf7ee"/>
+  <rect x="56" y="56" width="1088" height="788" rx="36" fill="#e8f0df"/>
+  <g transform="translate(600 448)">
+    <ellipse cx="-160" cy="-70" rx="140" ry="84" fill="#61402d"/>
+    <ellipse cx="0" cy="-10" rx="148" ry="88" fill="#704732"/>
+    <ellipse cx="170" cy="-78" rx="138" ry="82" fill="#5c3a28"/>
+    <ellipse cx="-118" cy="122" rx="140" ry="82" fill="#81543a"/>
+    <ellipse cx="66" cy="136" rx="150" ry="88" fill="#6b432f"/>
+  </g>
+  <text x="100" y="150" fill="#204d36" font-size="58" font-family="'Noto Serif JP', serif" font-weight="700">八升豆（在来種）</text>
+  <text x="100" y="220" fill="#4f6557" font-size="28" font-family="'Noto Sans JP', sans-serif">高知で研究を重ねた主力品種</text>
+  <rect x="100" y="658" width="320" height="64" rx="32" fill="#204d36"/>
+  <text x="138" y="700" fill="#fffaf0" font-size="28" font-family="'Noto Sans JP', sans-serif">L-ドーパ含有量が多い</text>
+</svg>

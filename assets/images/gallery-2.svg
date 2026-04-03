@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dff0d5"/>
+      <stop offset="100%" stop-color="#f6efe1"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6f9554"/>
+      <stop offset="100%" stop-color="#31573e"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#sky)"/>
+  <circle cx="984" cy="170" r="84" fill="#f3c66d" opacity="0.95"/>
+  <path d="M0 610C163 566 263 550 410 578c125 24 225 86 356 80 121-5 227-78 434-84v316H0Z" fill="#93b877"/>
+  <path d="M0 672C151 639 302 643 434 693c109 42 239 44 375-3 131-45 255-55 391-14v224H0Z" fill="url(#field)"/>
+  <path d="M176 588c57-121 164-179 325-179 14 137 109 214 243 260-143 26-216 80-248 158-166-19-287-96-320-239Z" fill="#507344" opacity="0.9"/>
+  <g fill="#f2eadb" opacity="0.82">
+    <path d="M503 429c27-57 79-97 141-121-18 58-56 103-114 134Z"/>
+    <path d="M589 496c34-71 98-121 178-148-23 74-72 126-155 160Z"/>
+    <path d="M661 579c43-57 100-88 181-92-50 56-109 85-181 92Z"/>
+  </g>
+  <text x="86" y="114" fill="#244833" font-size="44" font-family="'Noto Sans JP', sans-serif" font-weight="700">農園で育つムクナ豆</text>
+  <text x="86" y="170" fill="#4f6650" font-size="24" font-family="'Noto Sans JP', sans-serif">ローカル資産化したGitHub Pages向けイラスト</text>
+</svg>
