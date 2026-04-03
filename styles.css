@@ -747,6 +747,15 @@ button {
   letter-spacing: 0.03em;
 }
 
+.research-disclaimer {
+  margin: 56px auto 56px;
+  max-width: 980px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.95;
+}
+
 .research-index a {
   color: var(--accent);
 }
@@ -996,6 +1005,10 @@ button {
 
   .research-intro-tile p {
     margin-top: 24px;
+  }
+
+  .research-disclaimer {
+    margin: 40px auto 44px;
   }
 
   .paper-card__head {
