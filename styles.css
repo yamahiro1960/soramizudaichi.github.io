@@ -1152,8 +1152,9 @@ button {
 
 .variety-card h3,
 .story-card h3 {
-  padding: 0 20px 24px;
+  padding: 0 20px 12px;
   text-align: center;
+  margin-top: 8px;
 }
 
 .story-card p {
