@@ -575,7 +575,7 @@ button {
 .closing__copy h2,
 .cards-intro h2 {
   font-size: clamp(2rem, 3.5vw, 3.3rem);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .section__copy p,
