@@ -1,3 +1,30 @@
+/* farm2025-grid 圃場2025年用レイアウト */
+.farm2025-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 32px 32px;
+  align-items: start;
+  margin-bottom: 48px;
+}
+.farm2025-imgblock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.farm2025-caption {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 500;
+}
+.farm2025-rightblock {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 24px;
+  font-size: 1.08rem;
+}
 :root {
   --bg: #f4efe4;
   --surface: rgba(255, 252, 246, 0.78);
@@ -575,7 +602,7 @@ button {
 .closing__copy h2,
 .cards-intro h2 {
   font-size: clamp(2rem, 3.5vw, 3.3rem);
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .section__copy p,
