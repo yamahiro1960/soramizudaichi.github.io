@@ -7,6 +7,106 @@
   <meta name="description" content="南国市内の圃場で進む八升豆の栽培の様子をまとめたページです。">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ページ全体の共通設定 */
+    body {
+      background-color: #fff;
+      color: #333;
+      line-height: 1.8;
+      font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+    }
+
+    .farm-section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: bold;
+      margin-bottom: 40px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: #4a7c44; /* 植物をイメージした緑 */
+    }
+
+    /* グリッドレイアウトの設定 */
+    .farm-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    /* 各カードのスタイル */
+    .farm-card {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .farm-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .farm-card__body {
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    .farm-card__date {
+      font-weight: bold;
+      color: #4a7c44;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
+
+    .farm-card__title {
+      font-weight: bold;
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .farm-card__text {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    /* 背景色がつくセクションの調整 */
+    .bg-light {
+      background-color: #faf8f3;
+      width: 100%;
+    }
+
+    /* テキストメインの紹介エリア */
+    .intro-text-box {
+      max-width: 800px;
+      margin: 0 auto 40px;
+      text-align: center;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      border-left: 5px solid #4a7c44;
+    }
+  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">本文へ移動</a>
@@ -17,9 +117,7 @@
         <span class="site-brand__text">空と水と大地合同会社</span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
         <span class="menu-toggle__label">Menu</span>
       </button>
       <nav class="site-nav" id="site-nav" aria-label="主要ナビゲーション">
@@ -33,137 +131,101 @@
       </nav>
     </div>
   </header>
-  <main id="main">
-    <section class="section shell" style="padding: 48px 0 32px 0; background: #faf8f3;">
-      <div style="max-width:1100px; margin:0 auto; padding:56px 40px; border-radius:12px;">
-        <h2 style="text-align:center; font-size:2rem; font-weight:bold; margin-bottom:32px; letter-spacing:0.04em;">2025年圃場と栽培の様子</h2>
-        <div class="farm2025-grid" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-        <!-- 1行目 -->
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-            <img src="assets/images/farm/hana.png" alt="花の勢い" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:12px;">
-            <div class="farm2025-caption" style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">花の勢いがあります</div>
-          </div>
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-            <img src="assets/images/farm/aosaya.png" alt="莢が大きく" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:12px;">
-            <div class="farm2025-caption" style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">すでに莢が大きくなったものも！</div>
-          </div>
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center; display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-weight:bold; font-size:1.08rem; margin-bottom:8px; font-family:'Yu Gothic',Meiryo,sans-serif;">8月19日</div>
-            <div style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">花が立派に咲きました</div>
-          </div>
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-            <img src="assets/images/farm/yuuhi1.png" alt="圃場の夕日1" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:12px;">
-            <div class="farm2025-caption" style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">圃場からの夕日、きれいだなぁ～</div>
-          </div>
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-            <img src="assets/images/farm/yuuhi2.png" alt="圃場の夕日2" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:12px;">
-            <div class="farm2025-caption" style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;"></div>
-          </div>
-          <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center; display:flex; flex-direction:column; justify-content:center;">
-            <div style="font-weight:bold; font-size:1.08rem; margin-bottom:8px; font-family:'Yu Gothic',Meiryo,sans-serif;">8月14日</div>
-            <div style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">夕日が美しい圃場と八升豆の成長している葉っぱたち</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </section>
 
-    <!-- 追加：2024年5月6日 竹支柱作業と双葉の様子 -->
-    <section class="section shell" style="padding-top: 40px;">
-      <h2 style="text-align:center; font-size:1.7rem; font-weight:bold; margin-bottom:32px;">5月6日（火）竹を支柱とするために伐採作業をおこなっています</h2>
-      <div class="farm2024-grid" style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-        <!-- 双葉が顔を出しました -->
-        <div style="flex:1 1 300px; max-width:340px; min-width:260px; text-align:center;">
-          <img src="assets/images/farm/hatsuga.png" alt="双葉が顔を出しました" style="width:100%; border-radius:12px;">
-          <div style="font-weight:bold; font-size:1.3rem; margin:16px 0 8px;">双葉が顔を出しました！</div>
-          <div style="text-align:left; font-size:1rem;">5月6日の撮影です。ところどころで双葉が顔を出し始めました。</div>
+  <main id="main">
+    <div class="bg-light">
+      <section class="farm-section">
+        <h2 class="section-title">2025年 圃場と栽培の様子</h2>
+        <div class="farm-grid">
+          <article class="farm-card">
+            <img src="assets/images/farm/hana.png" alt="花の勢い">
+            <div class="farm-card__body">
+              <div class="farm-card__date">8月19日</div>
+              <div class="farm-card__title">花の勢いがあります</div>
+              <p class="farm-card__text">立派に咲き誇っています。順調な成長が伺えます。</p>
+            </div>
+          </article>
+          <article class="farm-card">
+            <img src="assets/images/farm/aosaya.png" alt="大きな莢">
+            <div class="farm-card__body">
+              <div class="farm-card__date">8月19日</div>
+              <div class="farm-card__title">すでに莢が大きく！</div>
+              <p class="farm-card__text">成長が早く、一部ではもう大きな莢が確認できています。</p>
+            </div>
+          </article>
+          <article class="farm-card">
+            <img src="assets/images/farm/yuuhi1.png" alt="圃場の夕日">
+            <div class="farm-card__body">
+              <div class="farm-card__date">8月14日</div>
+              <div class="farm-card__title">夕日に照らされる圃場</div>
+              <p class="farm-card__text">美しい夕日と八升豆の葉っぱたち。豊かな自然の中で育っています。</p>
+            </div>
+          </article>
         </div>
-        <!-- 双葉が元気にあいさつ -->
-        <div style="flex:1 1 300px; max-width:340px; min-width:260px; text-align:center;">
-          <img src="assets/images/farm/futaba.png" alt="双葉が元気にあいさつ" style="width:100%; border-radius:12px;">
-          <div style="font-weight:bold; font-size:1.3rem; margin:16px 0 8px;">双葉が元気にあいさつ！</div>
-          <div style="text-align:left; font-size:1rem;">こちらは元気な双葉と顔を出そうとしている芽が見えますね！1か所に3粒蒔いています。</div>
-        </div>
-        <!-- 支柱用の竹の伐採 -->
-        <div style="flex:1 1 300px; max-width:340px; min-width:260px; text-align:center;">
-          <img src="assets/images/farm/shichutake.png" alt="支柱用の竹の伐採" style="width:100%; border-radius:12px;">
-          <div style="font-weight:bold; font-size:1.3rem; margin:16px 0 8px;">支柱用の竹の伐採</div>
-          <div style="text-align:left; font-size:1rem;">竹を支柱にするために伐採しています。なるべく自然のものを使って栽培しているので、竹を約600本準備する予定です。</div>
-        </div>
+      </section>
+    </div>
+
+    <section class="farm-section">
+      <h2 class="section-title">2024年5月 竹支柱作業と発芽</h2>
+      <div class="farm-grid">
+        <article class="farm-card">
+          <img src="assets/images/farm/hatsuga.png" alt="双葉">
+          <div class="farm-card__body">
+            <div class="farm-card__date">5月6日</div>
+            <div class="farm-card__title">双葉が顔を出しました！</div>
+            <p class="farm-card__text">一箇所に3粒ずつ蒔いています。ところどころで新しい命が芽吹き始めました。</p>
+          </div>
+        </article>
+        <article class="farm-card">
+          <img src="assets/images/farm/shichutake.png" alt="竹の伐採">
+          <div class="farm-card__body">
+            <div class="farm-card__date">5月6日</div>
+            <div class="farm-card__title">支柱用の竹の伐採</div>
+            <p class="farm-card__text">自然由来の資材にこだわり、約600本の竹を自分たちで準備しています。</p>
+          </div>
+        </article>
+        <article class="farm-card">
+          <img src="assets/images/farm/mokushichuu.png" alt="支柱完成">
+          <div class="farm-card__body">
+            <div class="farm-card__date">5月1日</div>
+            <div class="farm-card__title">基礎の支柱立て完了</div>
+            <p class="farm-card__text">約520本の木製支柱を2人で立てました。整然と並ぶ姿は壮観です。</p>
+          </div>
+        </article>
       </div>
     </section>
-  </main>
-    <!-- 追加：2024年5月1日 支柱立て作業レポート -->
-    <section class="section shell" style="padding-top: 40px;">
-      <section class="section shell" style="padding: 48px 0 32px 0; background: #faf8f3;">
-        <div style="max-width:1100px; margin:0 auto; padding:32px; border-radius:12px;">
-          <h2 style="text-align:center; font-size:1.5rem; font-weight:bold; margin-bottom:8px; letter-spacing:0.04em;">5月1日（木）植田第二圃場ついに基礎の支柱立てが完了！</h2>
-          <div style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8; margin-bottom:32px;">
-            約520本の木製支柱を2人で立てました。整然と並んでるようでそうでないようで。愛嬌でご高覧ください。皆さんにお届けできるように、老体に鞭打って頑張りました。水糸で位置の特定をする技術や直角を出す技術など、まだまだ未熟な点が多いですが、何とか形になってきました。年末の収穫に向けて遅れを挽回するように頑張ります！
-          </div>
-          <div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-            <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-              <img src="assets/images/farm/dogu1.png" alt="今回の道具" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:8px;">
-              <div style="font-weight:bold; font-size:1.15rem; margin:12px 0 8px; text-align:center; font-family:'Yu Gothic',Meiryo,sans-serif;">今回の道具</div>
-              <div style="text-align:left; font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">アースドリルと大槌を使いました</div>
+
+    <div class="bg-light">
+      <section class="farm-section">
+        <h2 class="section-title">2024年4月下旬 試行錯誤の杭打ち作業</h2>
+        <div class="intro-text-box">
+          <p>
+            500本を超える杭打ち作業。ハンマー、電動杭打機、電動穴掘り機と試行錯誤を繰り返し、最終的に「エンジン式アースドリル」に辿り着きました。腰痛と戦いながらの重労働でしたが、年末の収穫に向けて一歩前進です！
+          </p>
+        </div>
+        <div class="farm-grid">
+          <article class="farm-card">
+            <img src="assets/images/farm/shitahojyo1.png" alt="杭建て作業1">
+          </article>
+          <article class="farm-card">
+            <img src="assets/images/farm/anahori.png" alt="穴掘りの様子">
+            <div class="farm-card__body">
+              <div class="farm-card__title">アースドリルでの作業</div>
+              <p class="farm-card__text">石に当たると危険もありますが、これが一番効率的な方法でした。</p>
             </div>
-            <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-              <img src="assets/images/farm/anahori.png" alt="穴掘りの様子" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:8px;">
-              <div style="font-weight:bold; font-size:1.15rem; margin:12px 0 8px; text-align:center; font-family:'Yu Gothic',Meiryo,sans-serif;">穴掘りの様子</div>
-              <div style="text-align:left; font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">アースドリルで穴を掘りましたが、腰が痛い（笑）時々石にあたり危険な目にも・・</div>
+          </article>
+          <article class="farm-card">
+            <img src="assets/images/farm/kusakari.png" alt="草刈り">
+            <div class="farm-card__body">
+              <div class="farm-card__title">除草剤を使わない土作り</div>
+              <p class="farm-card__text">安心をお届けするため、自走式草刈機で丁寧に若草を刈り取っています。</p>
             </div>
-            <div style="flex:1 1 320px; max-width:340px; min-width:260px; text-align:center;">
-              <img src="assets/images/farm/mokushichuu.png" alt="完成した様子" style="width:100%; max-width:320px; border-radius:12px; margin-bottom:8px;">
-              <div style="font-weight:bold; font-size:1.15rem; margin:12px 0 8px; text-align:center; font-family:'Yu Gothic',Meiryo,sans-serif;">完成した様子</div>
-              <div style="text-align:left; font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8;">およそ520本の景観は壮観です。やり切ったどーという満足感と大いなる疲労感</div>
-            </div>
-          </div>
+          </article>
         </div>
       </section>
-      <!-- 追加：2024年4月下旬 新規圃場での杭建て作業（移動） -->
-      <section class="section shell" style="padding-top: 40px;">
-        <section class="section shell" style="padding: 48px 0 32px 0; background: #faf8f3;">
-          <div style="max-width:1100px; margin:0 auto;">
-            <h2 style="text-align:center; font-size:1.5rem; font-weight:bold; margin-bottom:8px; letter-spacing:0.04em;">４月下旬　新規圃場での杭建て作業</h2>
-            <div style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8; margin-bottom:32px;">
-              およそ５００本を超える木の杭を立てています。この杭打ち、なかなかの重労働なんです。現在は、エンジン式アースドリルを使って穴を掘って、その穴に杭を入れて、大型ハンマーで打ち叩いて固定する方法を取りました。でも、この方法にたどり着くまで、試行錯誤しました。１番目の方法。大型ハンマーで杭を叩いて打ち込む方法。これでもできなくはないのですが、結構身体がきつい方法でした。<br>
-              ２番目の方法。電動式杭打機。これも発電機、杭打機を準備して試しましたが、機械自体が重くて、本数がかせげませんでした。<br>
-              ３番目の方法。穴を掘ろうということで、電動穴掘り機を試しましたが、これも機械が重いことと、発電機がしょっちゅう停止して悪効率。<br>
-              ４番目の方法。エンジン穴掘り機。これがこれまでの中では一番いい感じでした。
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-              <div style="flex:1 1 400px; max-width:520px; min-width:260px; text-align:center;">
-                <img src="assets/images/farm/shitahojyo1.png" alt="新規圃場での杭建て作業の様子1" style="width:100%; max-width:500px; border-radius:12px; margin-bottom:12px;">
-              </div>
-              <div style="flex:1 1 400px; max-width:520px; min-width:260px; text-align:center;">
-                <img src="assets/images/farm/shitahojyo2.png" alt="新規圃場での杭建て作業の様子2" style="width:100%; max-width:500px; border-radius:12px; margin-bottom:12px;">
-              </div>
-            </div>
-          </div>
-        </section>
-      <!-- 追加：草刈り作業の様子 -->
-      <section class="section shell" style="padding-top: 40px;">
-        <section class="section shell" style="padding: 48px 0 32px 0; background: #faf8f3;">
-          <div style="max-width:900px; margin:0 auto; padding:32px; border-radius:12px;">
-            <div style="font-size:1.08rem; font-family:'Yu Gothic',Meiryo,sans-serif; line-height:1.8; margin-bottom:24px;">
-              今年の植え付けのために圃場の草刈りを行いました。<br>
-              １年間お世話になる圃場。今年は、自走式の草刈り機を入れて若草を刈り取りました。<br>
-              草殺しなどの除草剤を使わず、事前栽培に徹しています。<br>
-              口に入れるものだから、安心を届けるために頑張っています！<br>
-              この圃場は、今月には種まきを始めます。
-            </div>
-            <div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
-              <div style="flex:1 1 400px; max-width:520px; min-width:260px; text-align:center;">
-                <img src="assets/images/farm/kusakari.png" alt="圃場の草刈り作業の様子" style="width:100%; max-width:500px; border-radius:12px; margin-bottom:12px;">
-              </div>
-              <div style="flex:1 1 400px; max-width:520px; min-width:260px; text-align:center;">
-                <img src="assets/images/farm/2nenmeshichuu.png" alt="2年目支柱の様子" style="width:100%; max-width:500px; border-radius:12px; margin-bottom:12px;">
-              </div>
-            </div>
-          </div>
-        </section>
-      </section>
-    </section>
+    </div>
+  </main>
+
   <footer class="site-footer">
     <div class="shell site-footer__inner">
       <nav class="site-footer__nav" aria-label="フッターナビゲーション">
