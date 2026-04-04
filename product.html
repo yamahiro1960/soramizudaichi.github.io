@@ -1,17 +1,5 @@
     <!-- 分析結果セクション追加 -->
-    <section class="product-analysis" style="margin: 48px 0; padding: 32px 0; background: #faf8f3; border-radius: 16px;">
-      <h2 style="text-align:center; font-size:1.5rem; font-weight:bold; margin-bottom:32px; letter-spacing:0.04em;">分析結果</h2>
-      <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center; align-items: flex-start;">
-        <div style="flex:1 1 320px; max-width:420px; min-width:220px; text-align:center;">
-          <img src="assets/images/product/kensa_nisshoku.png" alt="一般社団法人日本食品分析センターの分析結果" style="width:100%; max-width:400px; border-radius:12px; margin-bottom:12px;">
-          <div style="font-size:1.08rem; font-weight:bold; margin-bottom:4px;">一般社団法人日本食品分析センター</div>
-        </div>
-        <div style="flex:1 1 320px; max-width:420px; min-width:220px; text-align:center;">
-          <img src="assets/images/product/kensa_sankyuto.png" alt="山九知株式会社の分析結果" style="width:100%; max-width:400px; border-radius:12px; margin-bottom:12px;">
-          <div style="font-size:1.08rem; font-weight:bold; margin-bottom:4px;">山九知株式会社</div>
-        </div>
-      </div>
-    </section>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -78,30 +66,66 @@
       </div>
     </section>
 
-    <section class="section shell" aria-label="商品ラインナップ">
-      <div class="cards-intro cards-intro--center">
-        <h2>八升豆ラインナップ</h2>
-        <p>初めての方向けから毎日続けたい方向けまで、生活スタイルに合わせて選べる商品です。</p>
-      </div>
+<section class="section shell" aria-label="分析結果" style="margin-top: -20px; margin-bottom: 20px;">
+  <div class="cards-intro cards-intro--center" style="margin-bottom: 15px;">
+    <h2 style="margin-top: 0; margin-bottom: 0;">分析結果</h2>
+  </div>
+  
+  <div class="analysis-tile-grid" style="display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 0;">
+    <div class="analysis-tile" style="background:#fff; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.07); padding:18px 18px 10px 18px; width:180px; text-align:center; cursor:pointer;" onclick="openModal('modal-nisshoku')">
+      <img src="assets/images/product/kensa_nisshoku.png" alt="一般社団法人日本食品分析センターの分析結果" style="width:100%; max-width:140px; border-radius:8px; margin-bottom:10px;">
+      <div style="font-size:0.98rem; font-weight:bold;">日本食品分析センター</div>
+    </div>
+    <div class="analysis-tile" style="background:#fff; border-radius:14px; box-shadow:0 2px 8px rgba(0,0,0,0.07); padding:18px 18px 10px 18px; width:180px; text-align:center; cursor:pointer;" onclick="openModal('modal-sankyuto')">
+      <img src="assets/images/product/kensa_sankyuto.png" alt="山九知株式会社の分析結果" style="width:100%; max-width:140px; border-radius:8px; margin-bottom:10px;">
+      <div style="font-size:0.98rem; font-weight:bold;">山九知株式会社</div>
+    </div>
+  </div>
 
-      <div class="story-grid">
-        <article class="story-card">
-          <img src="assets/images/home/hasshoumame.png" alt="八升豆 100g" loading="lazy">
-          <h3>八升豆 100g</h3>
-          <p>日本古来から伝わってきた在来種の豆。大粒で平らな形状。少し灰色を帯びた薄茶色の豆です。</p>
-        </article>
-        <article class="story-card">
-          <img src="assets/images/home/furoridabean.png" alt="フロリダベルベットビーン 100g" loading="lazy">
-          <h3>フロリダベルベットビーン 100g</h3>
-          <p>まるくてトラ模様のような、かわいいお豆です。ひとつひとつの模様が個性を主張しているようでなんだか愛おしい豆です。</p>
-        </article>
-        <article class="story-card">
-          <img src="assets/images/home/mukunamame.png" alt="ムクナ豆 100g" loading="lazy">
-          <h3>ムクナ豆 100g</h3>
-          <p>とても白くて光沢の輝きを放っているきれいな豆です。まるまると太ってはち切れそうな形をしています。</p>
-        </article>
-      </div>
-    </section>
+  <div id="modal-nisshoku" class="analysis-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:14px; padding:24px; max-width:90vw; max-height:90vh; display:flex; flex-direction:column; align-items:center;">
+      <img src="assets/images/product/kensa_nisshoku.png" alt="日本食品分析センター拡大" style="max-width:80vw; max-height:70vh; border-radius:10px;">
+      <button onclick="closeModal('modal-nisshoku')" style="margin-top:18px; padding:8px 24px; border:none; background:#204d36; color:#fff; border-radius:6px; font-size:1rem; cursor:pointer;">閉じる</button>
+    </div>
+  </div>
+  <div id="modal-sankyuto" class="analysis-modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:14px; padding:24px; max-width:90vw; max-height:90vh; display:flex; flex-direction:column; align-items:center;">
+      <img src="assets/images/product/kensa_sankyuto.png" alt="山九知株式会社拡大" style="max-width:80vw; max-height:70vh; border-radius:10px;">
+      <button onclick="closeModal('modal-sankyuto')" style="margin-top:18px; padding:8px 24px; border:none; background:#204d36; color:#fff; border-radius:6px; font-size:1rem; cursor:pointer;">閉じる</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { document.querySelectorAll('.analysis-modal').forEach(function(modal){modal.style.display='none';}); } });
+    document.querySelectorAll('.analysis-modal').forEach(function(modal){ modal.addEventListener('click', function(e){ if(e.target === modal){modal.style.display='none';} }); });
+  </script>
+</section>
+
+<section class="section shell" aria-label="八升豆ラインナップ">
+  <div class="cards-intro cards-intro--center">
+    <h2>八升豆ラインナップ</h2>
+    <p>豆自体を自分で調理したい、植えたいの希望を叶えるために豆も販売しています。もう一歩楽しみたい方にぜひ喜んでいただけたらと思っています。</p>
+  </div>
+  <div class="story-grid">
+    <article class="story-card">
+      <img src="assets/images/home/hasshoumame.png" alt="八升豆 100g" loading="lazy">
+      <h3>八升豆 100g</h3>
+      <p>日本古来から伝わってきた在来種の豆。大粒で平らな形状。少し灰色を帯びた薄茶色の豆です。</p>
+    </article>
+    <article class="story-card">
+      <img src="assets/images/home/furoridabean.png" alt="フロリダベルベットビーン 100g" loading="lazy">
+      <h3>フロリダベルベットビーン 100g</h3>
+      <p>まるくてトラ模様のような、かわいいお豆です。</p>
+    </article>
+    <article class="story-card">
+      <img src="assets/images/home/mukunamame.png" alt="ムクナ豆 100g" loading="lazy">
+      <h3>ムクナ豆 100g</h3>
+      <p>とても白くて光沢の輝きを放っているきれいな豆です。</p>
+    </article>
+  </div>
+</section>
 
 
     <section class="market-cta" id="buy-links" aria-label="購入先リンク">
