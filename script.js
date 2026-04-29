@@ -502,19 +502,51 @@ const applyQaSearch = (rawQuery) => {
 
 // ── 検索入力イベント（デバウンス付きDB保存）
 let searchSaveTimer = null;
+let lastSavedQuery = '';
+
+const scheduleSearchLogSave = (query, delayMs = 700) => {
+  clearTimeout(searchSaveTimer);
+
+  const trimmed = query.trim();
+  if (trimmed.length < 2) {
+    return;
+  }
+
+  searchSaveTimer = setTimeout(() => {
+    const tokens = getTokens(trimmed);
+    const hitCount = qaAllItems.filter((item) => itemMatchesTokens(item, tokens)).length;
+    if (trimmed !== lastSavedQuery) {
+      saveSearchLog(trimmed, hitCount);
+      lastSavedQuery = trimmed;
+    }
+  }, delayMs);
+};
 
 if (qaSearchInput) {
   qaSearchInput.addEventListener('input', () => {
     const query = qaSearchInput.value;
     applyQaSearch(query);
+    scheduleSearchLogSave(query, 700);
+  });
 
-    clearTimeout(searchSaveTimer);
+  // 日本語IMEの確定入力でも保存を取りこぼさない
+  qaSearchInput.addEventListener('compositionend', () => {
+    const query = qaSearchInput.value;
+    applyQaSearch(query);
+    scheduleSearchLogSave(query, 350);
+  });
+
+  // 入力後すぐ画面遷移しても、フォーカスアウト時に保存
+  qaSearchInput.addEventListener('blur', () => {
+    const query = qaSearchInput.value;
     if (query.trim().length >= 2) {
-      searchSaveTimer = setTimeout(() => {
-        const tokens = getTokens(query);
-        const hitCount = qaAllItems.filter((item) => itemMatchesTokens(item, tokens)).length;
-        saveSearchLog(query.trim(), hitCount);
-      }, 1200);
+      scheduleSearchLogSave(query, 50);
+    }
+  });
+
+  qaSearchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      scheduleSearchLogSave(qaSearchInput.value, 50);
     }
   });
 }

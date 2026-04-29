@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q&amp;A管理 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../assets/images/home/smdimg.png" type="image/png">
+  <link rel="stylesheet" href="admin.css">
+  <style>
+    .qa-items-answer-field {
+      resize: vertical;
+      min-height: 120px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .record-item__published {
+      font-size: 0.75rem;
+      padding: 2px 7px;
+      border-radius: 9999px;
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .record-item__published--hidden {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+    .form-row-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 600px) {
+      .form-row-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../qa.html" target="_blank">← Q&amp;Aページを表示</a>
+  </header>
+
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html"><span class="nav-icon">🏠</span> ダッシュボード</a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html"><span class="nav-icon">🌿</span> 圃場情報</a>
+      <a href="research.html"><span class="nav-icon">🔬</span> 研究情報</a>
+      <a href="enjoy.html"><span class="nav-icon">🍵</span> 楽しみ方</a>
+      <a href="product.html"><span class="nav-icon">📦</span> 商品</a>
+      <a href="qa-items.html" class="active"><span class="nav-icon">❓</span> Q&amp;A管理</a>
+      <a href="qa-logs.html"><span class="nav-icon">🔎</span> Q&amp;A検索ログ</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-content">
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+      </div>
+
+      <div class="admin-page-title">
+        <h1>❓ Q&amp;A管理</h1>
+        <p>よくある質問と回答を追加・編集・削除します</p>
+      </div>
+
+      <div class="admin-layout">
+        <!-- 左パネル：一覧 -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2>Q&amp;A一覧</h2>
+            <button type="button" class="btn btn--primary btn--sm" id="qa-items-new-btn">＋ 新規追加</button>
+          </div>
+          <div class="admin-panel__body">
+            <div id="qa-items-list-msg" class="msg"></div>
+            <div id="qa-items-list-loading" class="loading-indicator">読み込み中...</div>
+            <ul class="record-list" id="qa-items-list"></ul>
+          </div>
+        </div>
+
+        <!-- 右パネル：詳細フォーム -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2 id="qa-items-detail-title">詳細</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="qa-items-detail-msg" class="msg"></div>
+            <div class="admin-detail" id="qa-items-empty-state">
+              <p class="record-list__empty">左の一覧から項目を選択するか、「＋ 新規追加」を押してください</p>
+            </div>
+            <form class="admin-form" id="qa-items-form" novalidate hidden>
+              <input type="hidden" id="qa-items-id">
+
+              <div class="form-row-3">
+                <div class="form-field">
+                  <label class="form-label" for="qa-items-sort-order">表示順</label>
+                  <input class="form-input" type="number" id="qa-items-sort-order" min="0" max="9999" value="100" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-label" for="qa-items-tag">タグ</label>
+                  <input class="form-input" type="text" id="qa-items-tag" placeholder="例: 栽培, 商品, 健康" maxlength="50" required>
+                </div>
+                <div class="form-field">
+                  <label class="form-toggle">
+                    <input type="checkbox" id="qa-items-published" checked>
+                    <span>公開する</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="qa-items-question">質問</label>
+                <input class="form-input" type="text" id="qa-items-question" placeholder="よくある質問を入力してください" maxlength="300" required>
+              </div>
+
+              <div class="form-field">
+                <label class="form-label" for="qa-items-answer">回答</label>
+                <textarea class="form-input qa-items-answer-field" id="qa-items-answer" placeholder="回答を入力してください" maxlength="2000" required></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary" id="qa-items-submit-btn">💾 保存</button>
+                <button type="button" class="btn btn--danger" id="qa-items-delete-btn" hidden>🗑 削除</button>
+                <button type="button" class="btn btn--ghost" id="qa-items-cancel-btn">キャンセル</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- 削除確認ダイアログ -->
+  <div id="qa-items-delete-dialog" class="dialog-overlay" hidden>
+    <div class="dialog-box">
+      <p class="dialog-box__msg">このQ&amp;A項目を削除してもよいですか？<br>この操作は元に戻せません。</p>
+      <div class="dialog-box__actions">
+        <button type="button" class="btn btn--danger" id="qa-items-delete-confirm">削除する</button>
+        <button type="button" class="btn btn--ghost" id="qa-items-delete-cancel">キャンセル</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const TABLE = 'qa_items';
+    let records = [];
+    let editingId = null;
+    let isNewMode = false;
+
+    const listEl = document.getElementById('qa-items-list');
+    const listMsg = document.getElementById('qa-items-list-msg');
+    const listLoading = document.getElementById('qa-items-list-loading');
+    const detailMsg = document.getElementById('qa-items-detail-msg');
+    const emptyState = document.getElementById('qa-items-empty-state');
+    const formEl = document.getElementById('qa-items-form');
+    const detailTitle = document.getElementById('qa-items-detail-title');
+    const submitBtn = document.getElementById('qa-items-submit-btn');
+    const deleteBtn = document.getElementById('qa-items-delete-btn');
+    const deleteDialog = document.getElementById('qa-items-delete-dialog');
+
+    // ---- ユーティリティ ----
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showMsg(el, text, type) {
+      if (!el) return;
+      el.textContent = text;
+      el.className = 'msg msg--' + type;
+      if (type === 'success') {
+        setTimeout(() => { el.textContent = ''; el.className = 'msg'; }, 3000);
+      }
+    }
+
+    // ---- 一覧読み込み ----
+    async function loadList() {
+      listLoading.style.display = 'block';
+      listEl.innerHTML = '';
+      try {
+        records = await fetchRecords(TABLE, 'sort_order.asc,id.asc');
+        renderList();
+      } catch (e) {
+        showMsg(listMsg, '読み込みエラー: ' + e.message, 'error');
+      } finally {
+        listLoading.style.display = 'none';
+      }
+    }
+
+    function renderList() {
+      listEl.innerHTML = '';
+      if (!records.length) {
+        listEl.innerHTML = '<li class="record-list__empty">Q&amp;A項目がありません。「＋ 新規追加」から追加できます。</li>';
+        return;
+      }
+      records.forEach((record) => {
+        const li = document.createElement('li');
+        li.className = 'record-item' + (record.id === editingId ? ' selected' : '');
+        li.dataset.id = record.id;
+        const pubLabel = record.published ? '公開' : '非公開';
+        const pubClass = record.published ? 'record-item__published' : 'record-item__published record-item__published--hidden';
+        li.innerHTML = `
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+            <span class="record-item__badge record-item__badge--neutral">${escapeHtml(record.tag)}</span>
+            <span class="${pubClass}">${pubLabel}</span>
+            <span style="font-size:0.78rem;color:#9ca3af;">順: ${record.sort_order}</span>
+          </div>
+          <span class="record-item__title" style="margin-top:4px;">${escapeHtml(record.question)}</span>
+        `;
+        li.addEventListener('click', () => fillForm(record));
+        listEl.appendChild(li);
+      });
+    }
+
+    // ---- フォーム操作 ----
+    function fillForm(record) {
+      isNewMode = false;
+      editingId = record.id;
+      detailTitle.textContent = 'Q&amp;Aを編集';
+      emptyState.hidden = true;
+      formEl.hidden = false;
+      deleteBtn.hidden = false;
+      submitBtn.textContent = '💾 保存';
+
+      document.getElementById('qa-items-id').value = record.id;
+      document.getElementById('qa-items-sort-order').value = record.sort_order ?? 100;
+      document.getElementById('qa-items-tag').value = record.tag ?? '';
+      document.getElementById('qa-items-question').value = record.question ?? '';
+      document.getElementById('qa-items-answer').value = record.answer ?? '';
+      document.getElementById('qa-items-published').checked = !!record.published;
+
+      renderList();
+      detailMsg.textContent = '';
+      detailMsg.className = 'msg';
+    }
+
+    function openNewForm() {
+      isNewMode = true;
+      editingId = null;
+      detailTitle.textContent = '新しいQ&amp;Aを追加';
+      emptyState.hidden = true;
+      formEl.hidden = false;
+      deleteBtn.hidden = true;
+      submitBtn.textContent = '➕ 追加する';
+      formEl.reset();
+      document.getElementById('qa-items-sort-order').value = 100;
+      document.getElementById('qa-items-published').checked = true;
+      renderList();
+      detailMsg.textContent = '';
+      detailMsg.className = 'msg';
+      document.getElementById('qa-items-tag').focus();
+    }
+
+    function resetForm() {
+      isNewMode = false;
+      editingId = null;
+      detailTitle.textContent = '詳細';
+      emptyState.hidden = false;
+      formEl.hidden = true;
+      formEl.reset();
+      renderList();
+      detailMsg.textContent = '';
+      detailMsg.className = 'msg';
+    }
+
+    // ---- フォーム送信（新規 or 更新） ----
+    formEl.addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const tag = document.getElementById('qa-items-tag').value.trim();
+      const question = document.getElementById('qa-items-question').value.trim();
+      const answer = document.getElementById('qa-items-answer').value.trim();
+      const sort_order = parseInt(document.getElementById('qa-items-sort-order').value, 10) || 100;
+      const published = document.getElementById('qa-items-published').checked;
+
+      if (!tag || !question || !answer) {
+        showMsg(detailMsg, 'タグ・質問・回答はすべて必須です', 'error');
+        return;
+      }
+
+      const data = { tag, question, answer, sort_order, published };
+
+      try {
+        submitBtn.disabled = true;
+        if (isNewMode) {
+          const inserted = await insertRecord(TABLE, data);
+          const newRecord = Array.isArray(inserted) ? inserted[0] : inserted;
+          if (newRecord) {
+            records.push(newRecord);
+            records.sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+            editingId = newRecord.id;
+            isNewMode = false;
+            deleteBtn.hidden = false;
+            submitBtn.textContent = '💾 保存';
+            document.getElementById('qa-items-id').value = newRecord.id;
+          }
+          showMsg(detailMsg, 'Q&amp;Aを追加しました', 'success');
+        } else {
+          await updateRecord(TABLE, editingId, data);
+          const idx = records.findIndex((r) => r.id === editingId);
+          if (idx !== -1) {
+            records[idx] = { ...records[idx], ...data };
+            records.sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+          }
+          showMsg(detailMsg, '保存しました', 'success');
+        }
+        renderList();
+      } catch (e) {
+        showMsg(detailMsg, '保存エラー: ' + e.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // ---- 削除 ----
+    deleteBtn.addEventListener('click', () => {
+      if (!editingId) return;
+      deleteDialog.hidden = false;
+    });
+
+    document.getElementById('qa-items-delete-confirm').addEventListener('click', async () => {
+      deleteDialog.hidden = true;
+      if (!editingId) return;
+      try {
+        await deleteRecord(TABLE, editingId);
+        records = records.filter((r) => r.id !== editingId);
+        resetForm();
+        showMsg(listMsg, '削除しました', 'success');
+      } catch (e) {
+        showMsg(detailMsg, '削除エラー: ' + e.message, 'error');
+      }
+    });
+
+    document.getElementById('qa-items-delete-cancel').addEventListener('click', () => {
+      deleteDialog.hidden = true;
+    });
+
+    // ---- ボタン ----
+    document.getElementById('qa-items-new-btn').addEventListener('click', openNewForm);
+    document.getElementById('qa-items-cancel-btn').addEventListener('click', resetForm);
+
+    // ---- 初期化 ----
+    window.adminAuthReady.then(loadList);
+  </script>
+
+</body>
+</html>

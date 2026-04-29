@@ -536,3 +536,35 @@ body {
   .dashboard-grid { grid-template-columns: 1fr 1fr; }
   .admin-login-card { padding: 22px; }
 }
+
+/* ---- 確認ダイアログ ---- */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+.dialog-overlay[hidden] { display: none; }
+.dialog-box {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  padding: 28px 32px;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+}
+.dialog-box__msg {
+  font-size: 0.96rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  color: var(--admin-text);
+}
+.dialog-box__actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
