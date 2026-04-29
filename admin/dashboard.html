@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者画面 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <!-- ヘッダー -->
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../index.html" target="_blank">← サイトを表示</a>
+  </header>
+
+  <!-- サイドバー -->
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html" class="active">
+        <span class="nav-icon">🏠</span> ダッシュボード
+      </a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html">
+        <span class="nav-icon">🌿</span> 圃場情報
+      </a>
+      <a href="research.html">
+        <span class="nav-icon">🔬</span> 研究情報
+      </a>
+      <a href="enjoy.html">
+        <span class="nav-icon">🍵</span> 楽しみ方
+      </a>
+      <a href="product.html">
+        <span class="nav-icon">📦</span> 商品
+      </a>
+    </nav>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <!-- 開発中バナー -->
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+        <!-- TODO: Supabase Auth (Magic Link または Password) を実装後に認証ガードを追加する -->
+      </div>
+
+      <div class="admin-page-title">
+        <h1>ダッシュボード</h1>
+        <p>管理したいセクションを選択してください</p>
+      </div>
+
+      <div class="dashboard-grid">
+
+        <a class="dashboard-card" href="farm.html">
+          <div class="dashboard-card__icon">🌿</div>
+          <div class="dashboard-card__title">圃場情報</div>
+          <div class="dashboard-card__desc">圃場の近況・写真レポートを追加・編集・削除します。</div>
+          <div class="dashboard-card__arrow">データを管理する →</div>
+        </a>
+
+        <a class="dashboard-card" href="research.html">
+          <div class="dashboard-card__icon">🔬</div>
+          <div class="dashboard-card__title">研究情報</div>
+          <div class="dashboard-card__desc">八升豆に関する研究論文・文献情報を管理します。</div>
+          <div class="dashboard-card__arrow">データを管理する →</div>
+        </a>
+
+        <a class="dashboard-card" href="enjoy.html">
+          <div class="dashboard-card__icon">🍵</div>
+          <div class="dashboard-card__title">楽しみ方</div>
+          <div class="dashboard-card__desc">食べ方・飲み方・レシピのカード情報を管理します。</div>
+          <div class="dashboard-card__arrow">データを管理する →</div>
+        </a>
+
+        <a class="dashboard-card" href="product.html">
+          <div class="dashboard-card__icon">📦</div>
+          <div class="dashboard-card__title">商品</div>
+          <div class="dashboard-card__desc">販売商品の情報・画像・説明文を管理します。</div>
+          <div class="dashboard-card__arrow">データを管理する →</div>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

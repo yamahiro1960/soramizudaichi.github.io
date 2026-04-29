@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>研究情報 管理 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../research.html" target="_blank">← 研究情報ページを表示</a>
+  </header>
+
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html"><span class="nav-icon">🏠</span> ダッシュボード</a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html"><span class="nav-icon">🌿</span> 圃場情報</a>
+      <a href="research.html" class="active"><span class="nav-icon">🔬</span> 研究情報</a>
+      <a href="enjoy.html"><span class="nav-icon">🍵</span> 楽しみ方</a>
+      <a href="product.html"><span class="nav-icon">📦</span> 商品</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+      </div>
+
+      <div class="admin-page-title">
+        <h1>🔬 研究情報 管理</h1>
+        <p>論文・文献情報を追加・編集・削除できます</p>
+      </div>
+
+      <div class="admin-layout">
+
+        <!-- 左：一覧 -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2>論文一覧</h2>
+            <button class="btn btn--primary btn--sm" id="btn-new-research">＋ 新規追加</button>
+          </div>
+          <div class="admin-panel__body">
+            <div id="research-list-msg" class="msg"></div>
+            <div id="research-list-loading" class="loading-indicator">読み込み中...</div>
+            <ul class="record-list" id="research-list"></ul>
+          </div>
+        </div>
+
+        <!-- 右：フォーム -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2 id="form-research-title">新規論文を追加</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="research-form-msg" class="msg"></div>
+            <form class="admin-form" id="research-form" novalidate>
+              <input type="hidden" id="research-id">
+
+              <div class="form-section">
+                <div class="form-section__title">カテゴリ情報</div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="research-cat-id">カテゴリID <span class="required">*</span></label>
+                    <input type="text" id="research-cat-id" placeholder="例：nutrition" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="research-cat-name">カテゴリ名 <span class="required">*</span></label>
+                    <input type="text" id="research-cat-name" placeholder="例：栄養・機能成分" required>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="research-cat-sort">カテゴリ表示順</label>
+                    <input type="number" id="research-cat-sort" value="100" min="1">
+                  </div>
+                  <div class="form-group">
+                    <label for="research-paper-sort">論文表示順</label>
+                    <input type="number" id="research-paper-sort" value="100" min="1">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">論文基本情報</div>
+                <div class="form-group">
+                  <label for="research-title">タイトル <span class="required">*</span></label>
+                  <input type="text" id="research-title" placeholder="論文・文献のタイトル" required>
+                </div>
+                <div class="form-group">
+                  <label for="research-org">発行機関・著者</label>
+                  <input type="text" id="research-org" placeholder="例：農研機構 / 〇〇大学">
+                </div>
+                <div class="form-group">
+                  <label for="research-url">参考URL</label>
+                  <input type="url" id="research-url" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                  <label for="research-summary">概要</label>
+                  <textarea id="research-summary" rows="3" placeholder="論文の概要・要約を記述してください"></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">セクション1</div>
+                <div class="form-group">
+                  <label for="research-s1-heading">見出し</label>
+                  <input type="text" id="research-s1-heading" placeholder="セクション1の見出し">
+                </div>
+                <div class="form-group">
+                  <label for="research-s1-body">本文</label>
+                  <textarea id="research-s1-body" rows="2" placeholder="セクション1の本文"></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">セクション2</div>
+                <div class="form-group">
+                  <label for="research-s2-heading">見出し</label>
+                  <input type="text" id="research-s2-heading" placeholder="セクション2の見出し">
+                </div>
+                <div class="form-group">
+                  <label for="research-s2-body">本文</label>
+                  <textarea id="research-s2-body" rows="2" placeholder="セクション2の本文"></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">セクション3</div>
+                <div class="form-group">
+                  <label for="research-s3-heading">見出し</label>
+                  <input type="text" id="research-s3-heading" placeholder="セクション3の見出し">
+                </div>
+                <div class="form-group">
+                  <label for="research-s3-body">本文</label>
+                  <textarea id="research-s3-body" rows="2" placeholder="セクション3の本文"></textarea>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">セクション4</div>
+                <div class="form-group">
+                  <label for="research-s4-heading">見出し</label>
+                  <input type="text" id="research-s4-heading" placeholder="セクション4の見出し">
+                </div>
+                <div class="form-group">
+                  <label for="research-s4-body">本文</label>
+                  <textarea id="research-s4-body" rows="2" placeholder="セクション4の本文"></textarea>
+                </div>
+              </div>
+
+              <label class="form-toggle">
+                <input type="checkbox" id="research-published" checked>
+                <span>公開する（チェックを外すと下書き保存）</span>
+              </label>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary" id="btn-research-save">💾 保存する</button>
+                <button type="button" class="btn btn--ghost" id="btn-research-cancel">キャンセル</button>
+                <button type="button" class="btn btn--danger btn--sm" id="btn-research-delete" style="margin-left:auto;display:none;">🗑 削除</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const TABLE = 'research_papers';
+    let records = [];
+    let editingId = null;
+
+    const listEl      = document.getElementById('research-list');
+    const listMsg     = document.getElementById('research-list-msg');
+    const listLoading = document.getElementById('research-list-loading');
+    const formMsg     = document.getElementById('research-form-msg');
+    const formTitle   = document.getElementById('form-research-title');
+    const btnDelete   = document.getElementById('btn-research-delete');
+
+    async function loadList() {
+      listLoading.style.display = 'block';
+      listEl.innerHTML = '';
+      try {
+        records = await fetchRecords(TABLE, 'category_sort.asc,paper_sort.asc,id.asc');
+        renderList();
+      } catch(e) {
+        showMsg(listMsg, '読み込みエラー: ' + e.message, 'error');
+      } finally {
+        listLoading.style.display = 'none';
+      }
+    }
+
+    function renderList() {
+      listEl.innerHTML = '';
+      if (!records.length) {
+        listEl.innerHTML = '<li class="record-list__empty">レコードがありません</li>'; return;
+      }
+      records.forEach(r => {
+        const li = document.createElement('li');
+        li.className = 'record-item' + (r.id === editingId ? ' selected' : '');
+        li.dataset.id = r.id;
+        li.innerHTML = `
+          <span class="record-item__title">${escapeHtml(r.title)}</span>
+          <span class="record-item__meta">${escapeHtml(r.category_name)}</span>
+          <span class="record-item__badge record-item__badge--${r.published ? 'pub' : 'draft'}">${r.published ? '公開' : '下書き'}</span>
+        `;
+        li.addEventListener('click', () => fillForm(r));
+        listEl.appendChild(li);
+      });
+    }
+
+    function fillForm(r) {
+      editingId = r.id;
+      formTitle.textContent = '論文を編集';
+      btnDelete.style.display = '';
+      document.getElementById('research-id').value = r.id;
+      document.getElementById('research-cat-id').value = r.category_id ?? '';
+      document.getElementById('research-cat-name').value = r.category_name ?? '';
+      document.getElementById('research-cat-sort').value = r.category_sort ?? 100;
+      document.getElementById('research-paper-sort').value = r.paper_sort ?? 100;
+      document.getElementById('research-title').value = r.title ?? '';
+      document.getElementById('research-org').value = r.organization ?? '';
+      document.getElementById('research-url').value = r.url ?? '';
+      document.getElementById('research-summary').value = r.summary ?? '';
+      document.getElementById('research-s1-heading').value = r.section1_heading ?? '';
+      document.getElementById('research-s1-body').value = r.section1_body ?? '';
+      document.getElementById('research-s2-heading').value = r.section2_heading ?? '';
+      document.getElementById('research-s2-body').value = r.section2_body ?? '';
+      document.getElementById('research-s3-heading').value = r.section3_heading ?? '';
+      document.getElementById('research-s3-body').value = r.section3_body ?? '';
+      document.getElementById('research-s4-heading').value = r.section4_heading ?? '';
+      document.getElementById('research-s4-body').value = r.section4_body ?? '';
+      document.getElementById('research-published').checked = !!r.published;
+      renderList();
+    }
+
+    function resetForm() {
+      editingId = null;
+      formTitle.textContent = '新規論文を追加';
+      btnDelete.style.display = 'none';
+      document.getElementById('research-form').reset();
+      document.getElementById('research-id').value = '';
+      document.getElementById('research-cat-sort').value = 100;
+      document.getElementById('research-paper-sort').value = 100;
+      document.getElementById('research-published').checked = true;
+      renderList();
+    }
+
+    document.getElementById('research-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        category_id:       document.getElementById('research-cat-id').value.trim(),
+        category_name:     document.getElementById('research-cat-name').value.trim(),
+        category_sort:     parseInt(document.getElementById('research-cat-sort').value, 10) || 100,
+        paper_sort:        parseInt(document.getElementById('research-paper-sort').value, 10) || 100,
+        title:             document.getElementById('research-title').value.trim(),
+        organization:      document.getElementById('research-org').value.trim(),
+        url:               document.getElementById('research-url').value.trim(),
+        summary:           document.getElementById('research-summary').value.trim(),
+        section1_heading:  document.getElementById('research-s1-heading').value.trim(),
+        section1_body:     document.getElementById('research-s1-body').value.trim(),
+        section2_heading:  document.getElementById('research-s2-heading').value.trim(),
+        section2_body:     document.getElementById('research-s2-body').value.trim(),
+        section3_heading:  document.getElementById('research-s3-heading').value.trim(),
+        section3_body:     document.getElementById('research-s3-body').value.trim(),
+        section4_heading:  document.getElementById('research-s4-heading').value.trim(),
+        section4_body:     document.getElementById('research-s4-body').value.trim(),
+        published:         document.getElementById('research-published').checked
+      };
+      if (!data.category_id || !data.category_name || !data.title) {
+        showMsg(formMsg, 'カテゴリID・カテゴリ名・タイトルは必須です', 'error'); return;
+      }
+      try {
+        if (editingId) {
+          await updateRecord(TABLE, editingId, data);
+          showMsg(formMsg, '更新しました', 'success');
+        } else {
+          await insertRecord(TABLE, data);
+          showMsg(formMsg, '追加しました', 'success');
+        }
+        await loadList();
+        resetForm();
+      } catch(e) {
+        showMsg(formMsg, '保存エラー: ' + e.message, 'error');
+      }
+    });
+
+    btnDelete.addEventListener('click', async () => {
+      const r = records.find(x => x.id === editingId);
+      if (!r || !confirmDelete(r.title)) return;
+      try {
+        await deleteRecord(TABLE, editingId);
+        showMsg(listMsg, '削除しました', 'success');
+        resetForm();
+        await loadList();
+      } catch(e) {
+        showMsg(formMsg, '削除エラー: ' + e.message, 'error');
+      }
+    });
+
+    document.getElementById('btn-new-research').addEventListener('click', resetForm);
+    document.getElementById('btn-research-cancel').addEventListener('click', resetForm);
+
+    loadList();
+  </script>
+</body>
+</html>

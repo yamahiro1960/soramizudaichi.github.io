@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>楽しみ方 管理 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../enjoy.html" target="_blank">← 楽しみ方ページを表示</a>
+  </header>
+
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html"><span class="nav-icon">🏠</span> ダッシュボード</a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html"><span class="nav-icon">🌿</span> 圃場情報</a>
+      <a href="research.html"><span class="nav-icon">🔬</span> 研究情報</a>
+      <a href="enjoy.html" class="active"><span class="nav-icon">🍵</span> 楽しみ方</a>
+      <a href="product.html"><span class="nav-icon">📦</span> 商品</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+      </div>
+
+      <div class="admin-page-title">
+        <h1>🍵 楽しみ方 管理</h1>
+        <p>食べ方・飲み方・レシピカードを追加・編集・削除できます</p>
+      </div>
+
+      <div class="admin-layout">
+
+        <!-- 左：一覧 -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2>カード一覧</h2>
+            <button class="btn btn--primary btn--sm" id="btn-new-enjoy">＋ 新規追加</button>
+          </div>
+          <div class="admin-panel__body">
+            <div id="enjoy-list-msg" class="msg"></div>
+            <div id="enjoy-list-loading" class="loading-indicator">読み込み中...</div>
+            <ul class="record-list" id="enjoy-list"></ul>
+          </div>
+        </div>
+
+        <!-- 右：フォーム -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2 id="form-enjoy-title">新規カードを追加</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="enjoy-form-msg" class="msg"></div>
+            <form class="admin-form" id="enjoy-form" novalidate>
+              <input type="hidden" id="enjoy-id">
+
+              <div class="form-group">
+                <label for="enjoy-sort-order">表示順 <span class="required">*</span></label>
+                <input type="number" id="enjoy-sort-order" min="1" value="10">
+              </div>
+
+              <div class="form-group">
+                <label for="enjoy-title">タイトル <span class="required">*</span></label>
+                <input type="text" id="enjoy-title" placeholder="例：ムクナ茶として" required>
+              </div>
+
+              <div class="form-group">
+                <label for="enjoy-description">説明文 <span class="required">*</span></label>
+                <textarea id="enjoy-description" rows="4" placeholder="楽しみ方の説明を記述してください" required></textarea>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">📷 画像</div>
+                <div class="form-group">
+                  <label for="enjoy-image-src">画像パス</label>
+                  <input type="text" id="enjoy-image-src" placeholder="例：assets/images/enjoy/mukunacha.png">
+                </div>
+                <div class="form-group">
+                  <label for="enjoy-image-alt">alt テキスト</label>
+                  <input type="text" id="enjoy-image-alt" placeholder="画像の説明（アクセシビリティ）">
+                </div>
+              </div>
+
+              <label class="form-toggle">
+                <input type="checkbox" id="enjoy-published" checked>
+                <span>公開する（チェックを外すと下書き保存）</span>
+              </label>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary">💾 保存する</button>
+                <button type="button" class="btn btn--ghost" id="btn-enjoy-cancel">キャンセル</button>
+                <button type="button" class="btn btn--danger btn--sm" id="btn-enjoy-delete" style="margin-left:auto;display:none;">🗑 削除</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const TABLE = 'enjoy_entries';
+    let records = [];
+    let editingId = null;
+
+    const listEl      = document.getElementById('enjoy-list');
+    const listMsg     = document.getElementById('enjoy-list-msg');
+    const listLoading = document.getElementById('enjoy-list-loading');
+    const formMsg     = document.getElementById('enjoy-form-msg');
+    const formTitle   = document.getElementById('form-enjoy-title');
+    const btnDelete   = document.getElementById('btn-enjoy-delete');
+
+    async function loadList() {
+      listLoading.style.display = 'block';
+      listEl.innerHTML = '';
+      try {
+        records = await fetchRecords(TABLE, 'sort_order.asc,id.asc');
+        renderList();
+      } catch(e) {
+        showMsg(listMsg, '読み込みエラー: ' + e.message + '（テーブルが未作成の場合はSQLを実行してください）', 'error');
+      } finally {
+        listLoading.style.display = 'none';
+      }
+    }
+
+    function renderList() {
+      listEl.innerHTML = '';
+      if (!records.length) {
+        listEl.innerHTML = '<li class="record-list__empty">レコードがありません</li>'; return;
+      }
+      records.forEach(r => {
+        const li = document.createElement('li');
+        li.className = 'record-item' + (r.id === editingId ? ' selected' : '');
+        li.dataset.id = r.id;
+        li.innerHTML = `
+          <span class="record-item__title">${escapeHtml(r.title)}</span>
+          <span class="record-item__meta">順: ${r.sort_order}</span>
+          <span class="record-item__badge record-item__badge--${r.published ? 'pub' : 'draft'}">${r.published ? '公開' : '下書き'}</span>
+        `;
+        li.addEventListener('click', () => fillForm(r));
+        listEl.appendChild(li);
+      });
+    }
+
+    function fillForm(r) {
+      editingId = r.id;
+      formTitle.textContent = 'カードを編集';
+      btnDelete.style.display = '';
+      document.getElementById('enjoy-id').value = r.id;
+      document.getElementById('enjoy-sort-order').value = r.sort_order ?? 10;
+      document.getElementById('enjoy-title').value = r.title ?? '';
+      document.getElementById('enjoy-description').value = r.description ?? '';
+      document.getElementById('enjoy-image-src').value = r.image_src ?? '';
+      document.getElementById('enjoy-image-alt').value = r.image_alt ?? '';
+      document.getElementById('enjoy-published').checked = !!r.published;
+      renderList();
+    }
+
+    function resetForm() {
+      editingId = null;
+      formTitle.textContent = '新規カードを追加';
+      btnDelete.style.display = 'none';
+      document.getElementById('enjoy-form').reset();
+      document.getElementById('enjoy-id').value = '';
+      document.getElementById('enjoy-sort-order').value = 10;
+      document.getElementById('enjoy-published').checked = true;
+      renderList();
+    }
+
+    document.getElementById('enjoy-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        sort_order:  parseInt(document.getElementById('enjoy-sort-order').value, 10) || 10,
+        title:       document.getElementById('enjoy-title').value.trim(),
+        description: document.getElementById('enjoy-description').value.trim(),
+        image_src:   document.getElementById('enjoy-image-src').value.trim() || null,
+        image_alt:   document.getElementById('enjoy-image-alt').value.trim() || null,
+        published:   document.getElementById('enjoy-published').checked
+      };
+      if (!data.title || !data.description) {
+        showMsg(formMsg, 'タイトルと説明文は必須です', 'error'); return;
+      }
+      try {
+        if (editingId) {
+          await updateRecord(TABLE, editingId, data);
+          showMsg(formMsg, '更新しました', 'success');
+        } else {
+          await insertRecord(TABLE, data);
+          showMsg(formMsg, '追加しました', 'success');
+        }
+        await loadList();
+        resetForm();
+      } catch(e) {
+        showMsg(formMsg, '保存エラー: ' + e.message, 'error');
+      }
+    });
+
+    btnDelete.addEventListener('click', async () => {
+      const r = records.find(x => x.id === editingId);
+      if (!r || !confirmDelete(r.title)) return;
+      try {
+        await deleteRecord(TABLE, editingId);
+        showMsg(listMsg, '削除しました', 'success');
+        resetForm();
+        await loadList();
+      } catch(e) {
+        showMsg(formMsg, '削除エラー: ' + e.message, 'error');
+      }
+    });
+
+    document.getElementById('btn-new-enjoy').addEventListener('click', resetForm);
+    document.getElementById('btn-enjoy-cancel').addEventListener('click', resetForm);
+
+    loadList();
+  </script>
+</body>
+</html>

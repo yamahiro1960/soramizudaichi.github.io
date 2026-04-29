@@ -7,106 +7,6 @@
   <meta name="description" content="南国市内の圃場で進む八升豆の栽培の様子をまとめたページです。">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
-  <style>
-    /* ページ全体の共通設定 */
-    body {
-      background-color: #fff;
-      color: #333;
-      line-height: 1.8;
-      font-family: 'Yu Gothic', 'Meiryo', sans-serif;
-    }
-
-    .farm-section {
-      padding: 60px 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-title {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: bold;
-      margin-bottom: 40px;
-      position: relative;
-      padding-bottom: 10px;
-    }
-
-    .section-title::after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 3px;
-      background: #4a7c44; /* 植物をイメージした緑 */
-    }
-
-    /* グリッドレイアウトの設定 */
-    .farm-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-
-    /* 各カードのスタイル */
-    .farm-card {
-      background: #fff;
-      border: 1px solid #eee;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .farm-card img {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .farm-card__body {
-      padding: 20px;
-      flex-grow: 1;
-    }
-
-    .farm-card__date {
-      font-weight: bold;
-      color: #4a7c44;
-      font-size: 0.9rem;
-      margin-bottom: 8px;
-    }
-
-    .farm-card__title {
-      font-weight: bold;
-      font-size: 1.1rem;
-      margin-bottom: 10px;
-    }
-
-    .farm-card__text {
-      font-size: 0.95rem;
-      color: #666;
-    }
-
-    /* 背景色がつくセクションの調整 */
-    .bg-light {
-      background-color: #faf8f3;
-      width: 100%;
-    }
-
-    /* テキストメインの紹介エリア */
-    .intro-text-box {
-      max-width: 800px;
-      margin: 0 auto 40px;
-      text-align: center;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      border-left: 5px solid #4a7c44;
-    }
-  </style>
 </head>
 <body>
   <a class="skip-link" href="#main">本文へ移動</a>
@@ -133,39 +33,58 @@
   </header>
 
   <main id="main">
-    <div class="bg-light">
-        <section class="farm-section bg-light">
-          <h2 class="farm-title">2025年圃場と栽培の様子</h2>
-          <div class="farm2025-grid">
-            <div class="farm2025-imgblock">
-              <img class="farm-image" src="assets/images/farm/hana.png" alt="花の勢い">
-              <div class="farm2025-caption farm-text">花の勢いがあります</div>
-            </div>
-            <div class="farm2025-imgblock">
-              <img class="farm-image" src="assets/images/farm/aosaya.png" alt="莢が大きく">
-              <div class="farm2025-caption farm-text">すでに莢が大きくなったものも！</div>
-            </div>
-            <div class="farm2025-rightblock farm-text">
-              <div class="farm-date">8月19日</div>
-              <div>花が立派に咲きました</div>
-            </div>
-            <div class="farm2025-imgblock">
-              <img class="farm-image" src="assets/images/farm/yuuhi1.png" alt="圃場の夕日1">
-              <div class="farm2025-caption farm-text">圃場からの夕日、きれいだなぁ～</div>
-            </div>
-            <div class="farm2025-imgblock">
-              <img class="farm-image" src="assets/images/farm/yuuhi2.png" alt="圃場の夕日2">
-              <div class="farm2025-caption farm-text"></div>
-            </div>
-            <div class="farm2025-rightblock farm-text">
-              <div class="farm-date">8月14日</div>
-              <div>夕日が美しい圃場と八升豆の成長している葉っぱたち</div>
-            </div>
-        </div>
-      </section>
-    </div>
+    <section class="page-hero page-hero--farm">
+      <div class="page-hero__backdrop"></div>
+      <div class="page-hero__content shell">
+        <p class="eyebrow">Farm Journal</p>
+        <h1>圃場レポート</h1>
+        <p>季節ごとの生育記録を、現地写真とコメントでデータベース管理しています。</p>
+      </div>
+    </section>
 
+    <section class="section shell farm-intro">
+      <div class="farm-intro__panel">
+        <p class="eyebrow">Live Data</p>
+        <h2>圃場の進捗をリアルタイムで更新</h2>
+        <p>このセクションはDB連携に対応しており、Supabaseのデータを優先表示します。接続できない場合はローカルJSONに自動でフォールバックします。</p>
+      </div>
+    </section>
 
+    <section class="section shell">
+      <div class="farm-log farm-log--modern" data-farm-source="data/farm-data.json" data-farm-table="farm_updates">
+        <article class="farm-entry farm-entry--modern">
+          <p class="farm-entry__date">2025-08-19</p>
+          <h3>花が立派に咲きました</h3>
+          <p>生育が安定し、花付きと莢の成長が同時に進んでいます。次週は収穫に向けた区画管理を強化します。</p>
+          <div class="farm-entry__media-grid">
+            <figure class="farm-media-card">
+              <img src="assets/images/farm/hana.png" alt="花の勢いがある株">
+              <figcaption>花の勢いがあります</figcaption>
+            </figure>
+            <figure class="farm-media-card">
+              <img src="assets/images/farm/aosaya.png" alt="大きくなった莢">
+              <figcaption>すでに莢が大きくなったものもあります</figcaption>
+            </figure>
+          </div>
+        </article>
+
+        <article class="farm-entry farm-entry--modern">
+          <p class="farm-entry__date">2025-08-14</p>
+          <h3>夕暮れの圃場で葉の張りを確認</h3>
+          <p>夕方の温度帯で葉面の状態を観察。日中の暑さの影響を受けつつも、全体として活力のある葉姿を維持しています。</p>
+          <div class="farm-entry__media-grid">
+            <figure class="farm-media-card">
+              <img src="assets/images/farm/yuuhi1.png" alt="圃場から見える夕日">
+              <figcaption>圃場からの夕日が鮮やかです</figcaption>
+            </figure>
+            <figure class="farm-media-card">
+              <img src="assets/images/farm/yuuhi2.png" alt="夕日に照らされた圃場">
+              <figcaption>夕日の中で葉の状態を確認</figcaption>
+            </figure>
+          </div>
+        </article>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -183,6 +102,7 @@
       <p class="site-footer__small">Copyright <span id="current-year"></span> Soratotomizutodaichi</p>
     </div>
   </footer>
+  <script src="data/supabase-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

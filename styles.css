@@ -1166,6 +1166,91 @@ button {
   object-fit: cover;
 }
 
+.page-hero--farm .page-hero__backdrop {
+  background:
+    linear-gradient(180deg, rgba(17, 28, 20, 0.42), rgba(17, 28, 20, 0.72)),
+    url("assets/images/farm/yuuhi1.png") center 42%/cover no-repeat;
+}
+
+.farm-intro {
+  padding-top: 34px;
+  padding-bottom: 12px;
+}
+
+.farm-intro__panel {
+  padding: 34px 30px;
+  background: linear-gradient(135deg, rgba(35, 88, 63, 0.94), rgba(23, 65, 47, 0.94));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  color: #eef6ef;
+}
+
+.farm-intro__panel .eyebrow {
+  margin-bottom: 10px;
+  color: rgba(255, 245, 220, 0.9);
+}
+
+.farm-intro__panel h2 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3.1vw, 2.55rem);
+  line-height: 1.25;
+}
+
+.farm-intro__panel p {
+  margin: 16px 0 0;
+  max-width: 980px;
+  color: rgba(240, 247, 240, 0.92);
+}
+
+.farm-log--modern {
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+.farm-entry--modern {
+  padding: 28px;
+  border: 1px solid rgba(31, 42, 31, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(86, 143, 102, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(247, 243, 233, 0.96));
+}
+
+.farm-entry--modern h3 {
+  margin-bottom: 8px;
+}
+
+.farm-entry--modern p {
+  margin: 0;
+}
+
+.farm-entry__media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.farm-media-card {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(31, 42, 31, 0.12);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.farm-media-card img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.farm-media-card figcaption {
+  padding: 10px 12px 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .variety-card,
 .story-card {
   overflow: hidden;
@@ -1379,6 +1464,10 @@ button {
   .gallery__item,
   .gallery__item--tall {
     min-height: 260px;
+  }
+
+  .farm-entry__media-grid {
+    grid-template-columns: 1fr;
   }
 
   .gallery__item img {

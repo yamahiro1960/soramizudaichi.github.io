@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>圃場情報 管理 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../farm.html" target="_blank">← 圃場ページを表示</a>
+  </header>
+
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html"><span class="nav-icon">🏠</span> ダッシュボード</a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html" class="active"><span class="nav-icon">🌿</span> 圃場情報</a>
+      <a href="research.html"><span class="nav-icon">🔬</span> 研究情報</a>
+      <a href="enjoy.html"><span class="nav-icon">🍵</span> 楽しみ方</a>
+      <a href="product.html"><span class="nav-icon">📦</span> 商品</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-content">
+
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+      </div>
+
+      <div class="admin-page-title">
+        <h1>🌿 圃場情報 管理</h1>
+        <p>圃場の近況レポートを追加・編集・削除できます</p>
+      </div>
+
+      <div class="admin-layout">
+
+        <!-- 左：一覧 -->
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2>レポート一覧</h2>
+            <button class="btn btn--primary btn--sm" id="btn-new-farm">＋ 新規追加</button>
+          </div>
+          <div class="admin-panel__body">
+            <div id="farm-list-msg" class="msg"></div>
+            <div id="farm-list-loading" class="loading-indicator">読み込み中...</div>
+            <ul class="record-list" id="farm-list"></ul>
+          </div>
+        </div>
+
+        <!-- 右：フォーム -->
+        <div class="admin-panel" id="farm-form-panel">
+          <div class="admin-panel__head">
+            <h2 id="form-farm-title">新規レポートを追加</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="farm-form-msg" class="msg"></div>
+            <form class="admin-form" id="farm-form" novalidate>
+              <input type="hidden" id="farm-id">
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="farm-sort-order">表示順 <span class="required">*</span></label>
+                  <input type="number" id="farm-sort-order" min="1" value="10" required>
+                </div>
+                <div class="form-group">
+                  <label for="farm-date-label">日付 <span class="required">*</span></label>
+                  <input type="date" id="farm-date-label" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="farm-title">タイトル <span class="required">*</span></label>
+                <input type="text" id="farm-title" placeholder="例：花が立派に咲きました" required>
+              </div>
+
+              <div class="form-group">
+                <label for="farm-description">本文 <span class="required">*</span></label>
+                <textarea id="farm-description" rows="4" placeholder="圃場の近況を詳しく記述してください" required></textarea>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">📷 写真1</div>
+                <div class="form-group">
+                  <label for="farm-photo1-src">画像パス</label>
+                  <input type="text" id="farm-photo1-src" placeholder="例：assets/images/farm/hana.png">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="farm-photo1-alt">alt テキスト</label>
+                    <input type="text" id="farm-photo1-alt" placeholder="画像の説明（アクセシビリティ）">
+                  </div>
+                  <div class="form-group">
+                    <label for="farm-photo1-caption">キャプション</label>
+                    <input type="text" id="farm-photo1-caption" placeholder="写真の説明文">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <div class="form-section__title">📷 写真2</div>
+                <div class="form-group">
+                  <label for="farm-photo2-src">画像パス</label>
+                  <input type="text" id="farm-photo2-src" placeholder="例：assets/images/farm/aosaya.png">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="farm-photo2-alt">alt テキスト</label>
+                    <input type="text" id="farm-photo2-alt" placeholder="画像の説明（アクセシビリティ）">
+                  </div>
+                  <div class="form-group">
+                    <label for="farm-photo2-caption">キャプション</label>
+                    <input type="text" id="farm-photo2-caption" placeholder="写真の説明文">
+                  </div>
+                </div>
+              </div>
+
+              <label class="form-toggle">
+                <input type="checkbox" id="farm-published" checked>
+                <span>公開する（チェックを外すと下書き保存）</span>
+              </label>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary" id="btn-farm-save">💾 保存する</button>
+                <button type="button" class="btn btn--ghost" id="btn-farm-cancel">キャンセル</button>
+                <button type="button" class="btn btn--danger btn--sm" id="btn-farm-delete" style="margin-left:auto;display:none;">🗑 削除</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const TABLE = 'farm_updates';
+    let records = [];
+    let editingId = null;
+
+    const listEl       = document.getElementById('farm-list');
+    const listMsg      = document.getElementById('farm-list-msg');
+    const listLoading  = document.getElementById('farm-list-loading');
+    const formMsg      = document.getElementById('farm-form-msg');
+    const formTitle    = document.getElementById('form-farm-title');
+    const btnDelete    = document.getElementById('btn-farm-delete');
+
+    // ---- 一覧読み込み ----
+    async function loadList() {
+      listLoading.style.display = 'block';
+      listEl.innerHTML = '';
+      try {
+        records = await fetchRecords(TABLE, 'sort_order.asc,id.asc');
+        renderList();
+      } catch(e) {
+        showMsg(listMsg, '読み込みエラー: ' + e.message, 'error');
+      } finally {
+        listLoading.style.display = 'none';
+      }
+    }
+
+    function renderList() {
+      listEl.innerHTML = '';
+      if (!records.length) {
+        listEl.innerHTML = '<li class="record-list__empty">レコードがありません</li>';
+        return;
+      }
+      records.forEach(r => {
+        const li = document.createElement('li');
+        li.className = 'record-item' + (r.id === editingId ? ' selected' : '');
+        li.dataset.id = r.id;
+        li.innerHTML = `
+          <span class="record-item__title">${escapeHtml(r.title)}</span>
+          <span class="record-item__meta">${escapeHtml(r.date_label)}</span>
+          <span class="record-item__badge record-item__badge--${r.published ? 'pub' : 'draft'}">${r.published ? '公開' : '下書き'}</span>
+        `;
+        li.addEventListener('click', () => fillForm(r));
+        listEl.appendChild(li);
+      });
+    }
+
+    // ---- フォームに値をセット ----
+    function fillForm(r) {
+      editingId = r.id;
+      formTitle.textContent = 'レポートを編集';
+      btnDelete.style.display = '';
+      document.getElementById('farm-id').value = r.id;
+      document.getElementById('farm-sort-order').value = r.sort_order ?? 10;
+      document.getElementById('farm-date-label').value = r.date_label ?? '';
+      document.getElementById('farm-title').value = r.title ?? '';
+      document.getElementById('farm-description').value = r.description ?? '';
+      document.getElementById('farm-photo1-src').value = r.photo1_src ?? '';
+      document.getElementById('farm-photo1-alt').value = r.photo1_alt ?? '';
+      document.getElementById('farm-photo1-caption').value = r.photo1_caption ?? '';
+      document.getElementById('farm-photo2-src').value = r.photo2_src ?? '';
+      document.getElementById('farm-photo2-alt').value = r.photo2_alt ?? '';
+      document.getElementById('farm-photo2-caption').value = r.photo2_caption ?? '';
+      document.getElementById('farm-published').checked = !!r.published;
+      renderList();
+    }
+
+    // ---- フォームをリセット ----
+    function resetForm() {
+      editingId = null;
+      formTitle.textContent = '新規レポートを追加';
+      btnDelete.style.display = 'none';
+      document.getElementById('farm-form').reset();
+      document.getElementById('farm-id').value = '';
+      document.getElementById('farm-sort-order').value = 10;
+      document.getElementById('farm-published').checked = true;
+      renderList();
+    }
+
+    // ---- フォーム送信（保存） ----
+    document.getElementById('farm-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const data = {
+        sort_order:     parseInt(document.getElementById('farm-sort-order').value, 10) || 10,
+        date_label:     document.getElementById('farm-date-label').value.trim(),
+        title:          document.getElementById('farm-title').value.trim(),
+        description:    document.getElementById('farm-description').value.trim(),
+        photo1_src:     document.getElementById('farm-photo1-src').value.trim() || null,
+        photo1_alt:     document.getElementById('farm-photo1-alt').value.trim() || null,
+        photo1_caption: document.getElementById('farm-photo1-caption').value.trim() || null,
+        photo2_src:     document.getElementById('farm-photo2-src').value.trim() || null,
+        photo2_alt:     document.getElementById('farm-photo2-alt').value.trim() || null,
+        photo2_caption: document.getElementById('farm-photo2-caption').value.trim() || null,
+        published:      document.getElementById('farm-published').checked
+      };
+      if (!data.title || !data.date_label || !data.description) {
+        showMsg(formMsg, 'タイトル・日付・本文は必須です', 'error'); return;
+      }
+      try {
+        if (editingId) {
+          await updateRecord(TABLE, editingId, data);
+          showMsg(formMsg, '更新しました', 'success');
+        } else {
+          await insertRecord(TABLE, data);
+          showMsg(formMsg, '追加しました', 'success');
+        }
+        await loadList();
+        resetForm();
+      } catch(e) {
+        showMsg(formMsg, '保存エラー: ' + e.message, 'error');
+      }
+    });
+
+    // ---- 削除ボタン ----
+    btnDelete.addEventListener('click', async () => {
+      const r = records.find(x => x.id === editingId);
+      if (!r || !confirmDelete(r.title)) return;
+      try {
+        await deleteRecord(TABLE, editingId);
+        showMsg(listMsg, '削除しました', 'success');
+        resetForm();
+        await loadList();
+      } catch(e) {
+        showMsg(formMsg, '削除エラー: ' + e.message, 'error');
+      }
+    });
+
+    document.getElementById('btn-new-farm').addEventListener('click', resetForm);
+    document.getElementById('btn-farm-cancel').addEventListener('click', resetForm);
+
+    // ---- 初期読み込み ----
+    loadList();
+  </script>
+</body>
+</html>
