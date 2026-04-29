@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
@@ -7,32 +7,41 @@
   <link rel="icon" href="../assets/images/home/smdimg.png" type="image/png">
   <link rel="stylesheet" href="admin.css">
   <style>
-    .qa-items-answer-field {
-      resize: vertical;
-      min-height: 120px;
-      font-family: inherit;
-      font-size: 0.95rem;
-      line-height: 1.6;
+    .qa-item-row {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 10px 14px;
+      border: 1px solid var(--admin-border);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+      background: #fff;
+      margin-bottom: 6px;
     }
-    .record-item__published {
-      font-size: 0.75rem;
-      padding: 2px 7px;
-      border-radius: 9999px;
-      background: #d1fae5;
-      color: #065f46;
-    }
-    .record-item__published--hidden {
-      background: #f3f4f6;
-      color: #6b7280;
-    }
-    .form-row-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-    }
-    @media (max-width: 600px) {
-      .form-row-3 { grid-template-columns: 1fr; }
-    }
+    .qa-item-row:hover { background: var(--admin-primary-light); border-color: var(--admin-accent); }
+    .qa-item-row.selected { background: var(--admin-primary-light); border-color: var(--admin-primary); box-shadow: 0 0 0 2px rgba(58,125,68,0.15); }
+    .qa-item-row__meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .qa-item-row__tag { font-size: 0.72rem; font-weight: 700; padding: 2px 8px; border-radius: 9999px; background: #e8f5e9; color: #2e7d32; white-space: nowrap; }
+    .qa-item-row__pub { font-size: 0.72rem; padding: 2px 7px; border-radius: 9999px; background: #d1fae5; color: #065f46; font-weight: 600; }
+    .qa-item-row__pub--hidden { background: #f3f4f6; color: #9ca3af; }
+    .qa-item-row__order { font-size: 0.72rem; color: #b0b8c1; margin-left: auto; }
+    .qa-item-row__question { font-size: 0.9rem; font-weight: 600; color: var(--admin-text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .form-field { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 0.8rem; font-weight: 700; color: var(--admin-text-sub); letter-spacing: 0.02em; }
+    .form-label .required { color: var(--admin-danger); margin-left: 2px; }
+    .form-input { width: 100%; padding: 9px 12px; border: 1px solid var(--admin-border); border-radius: 7px; font-size: 0.9rem; font-family: var(--font); color: var(--admin-text); background: #fff; box-sizing: border-box; transition: border-color 0.15s, box-shadow 0.15s; }
+    .form-input:focus { outline: none; border-color: var(--admin-accent); box-shadow: 0 0 0 3px rgba(106,171,116,0.18); }
+    .form-input--textarea { resize: vertical; min-height: 150px; line-height: 1.7; }
+    .form-meta-row { display: grid; grid-template-columns: 110px 1fr auto; gap: 14px; align-items: end; }
+    @media (max-width: 600px) { .form-meta-row { grid-template-columns: 1fr; } }
+    .form-toggle-field { display: flex; align-items: center; gap: 8px; padding-bottom: 9px; cursor: pointer; }
+    .form-toggle-field input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--admin-primary); }
+    .form-toggle-field span { font-size: 0.9rem; font-weight: 600; color: var(--admin-text); }
+    .form-divider { border: none; border-top: 1px solid var(--admin-border); margin: 2px 0 4px; }
+    .form-actions-row { display: flex; align-items: center; gap: 8px; padding-top: 8px; border-top: 1px solid var(--admin-border); }
+    .form-actions-row .spacer { flex: 1; }
+    .empty-state { padding: 40px 20px; text-align: center; color: var(--admin-text-sub); font-size: 0.9rem; }
   </style>
 </head>
 <body>
@@ -72,7 +81,7 @@
       </div>
 
       <div class="admin-layout">
-        <!-- 左パネル：一覧 -->
+
         <div class="admin-panel">
           <div class="admin-panel__head">
             <h2>Q&amp;A一覧</h2>
@@ -81,63 +90,60 @@
           <div class="admin-panel__body">
             <div id="qa-items-list-msg" class="msg"></div>
             <div id="qa-items-list-loading" class="loading-indicator">読み込み中...</div>
-            <ul class="record-list" id="qa-items-list"></ul>
+            <ul id="qa-items-list" style="list-style:none;padding:0;margin:0;"></ul>
           </div>
         </div>
 
-        <!-- 右パネル：詳細フォーム -->
         <div class="admin-panel">
           <div class="admin-panel__head">
             <h2 id="qa-items-detail-title">詳細</h2>
           </div>
           <div class="admin-panel__body">
             <div id="qa-items-detail-msg" class="msg"></div>
-            <div class="admin-detail" id="qa-items-empty-state">
-              <p class="record-list__empty">左の一覧から項目を選択するか、「＋ 新規追加」を押してください</p>
+            <div id="qa-items-empty-state" class="empty-state">
+              左の一覧から項目を選択するか、「＋ 新規追加」を押してください
             </div>
             <form class="admin-form" id="qa-items-form" novalidate hidden>
               <input type="hidden" id="qa-items-id">
-
-              <div class="form-row-3">
+              <div class="form-meta-row">
                 <div class="form-field">
                   <label class="form-label" for="qa-items-sort-order">表示順</label>
                   <input class="form-input" type="number" id="qa-items-sort-order" min="0" max="9999" value="100" required>
                 </div>
                 <div class="form-field">
-                  <label class="form-label" for="qa-items-tag">タグ</label>
-                  <input class="form-input" type="text" id="qa-items-tag" placeholder="例: 栽培, 商品, 健康" maxlength="50" required>
+                  <label class="form-label" for="qa-items-tag">タグ <span class="required">*</span></label>
+                  <input class="form-input" type="text" id="qa-items-tag" placeholder="例: 商品について、保存・品質について" maxlength="50" required>
                 </div>
                 <div class="form-field">
-                  <label class="form-toggle">
+                  <label class="form-toggle-field">
                     <input type="checkbox" id="qa-items-published" checked>
                     <span>公開する</span>
                   </label>
                 </div>
               </div>
-
+              <hr class="form-divider">
               <div class="form-field">
-                <label class="form-label" for="qa-items-question">質問</label>
-                <input class="form-input" type="text" id="qa-items-question" placeholder="よくある質問を入力してください" maxlength="300" required>
+                <label class="form-label" for="qa-items-question">質問 <span class="required">*</span></label>
+                <input class="form-input" type="text" id="qa-items-question" placeholder="例: 八升豆（ムクナ豆）とは何ですか？" maxlength="300" required>
               </div>
-
               <div class="form-field">
-                <label class="form-label" for="qa-items-answer">回答</label>
-                <textarea class="form-input qa-items-answer-field" id="qa-items-answer" placeholder="回答を入力してください" maxlength="2000" required></textarea>
+                <label class="form-label" for="qa-items-answer">回答 <span class="required">*</span></label>
+                <textarea class="form-input form-input--textarea" id="qa-items-answer" placeholder="回答を入力してください" maxlength="2000" required></textarea>
               </div>
-
-              <div class="form-actions">
+              <div class="form-actions-row">
                 <button type="submit" class="btn btn--primary" id="qa-items-submit-btn">💾 保存</button>
-                <button type="button" class="btn btn--danger" id="qa-items-delete-btn" hidden>🗑 削除</button>
                 <button type="button" class="btn btn--ghost" id="qa-items-cancel-btn">キャンセル</button>
+                <div class="spacer"></div>
+                <button type="button" class="btn btn--danger" id="qa-items-delete-btn" hidden>🗑 削除</button>
               </div>
             </form>
           </div>
         </div>
+
       </div>
     </div>
   </main>
 
-  <!-- 削除確認ダイアログ -->
   <div id="qa-items-delete-dialog" class="dialog-overlay" hidden>
     <div class="dialog-box">
       <p class="dialog-box__msg">このQ&amp;A項目を削除してもよいですか？<br>この操作は元に戻せません。</p>
@@ -156,20 +162,17 @@
     let editingId = null;
     let isNewMode = false;
 
-    const listEl = document.getElementById('qa-items-list');
-    const listMsg = document.getElementById('qa-items-list-msg');
-    const listLoading = document.getElementById('qa-items-list-loading');
-    const detailMsg = document.getElementById('qa-items-detail-msg');
-    const emptyState = document.getElementById('qa-items-empty-state');
-    const formEl = document.getElementById('qa-items-form');
-    const detailTitle = document.getElementById('qa-items-detail-title');
-    const submitBtn = document.getElementById('qa-items-submit-btn');
-    const deleteBtn = document.getElementById('qa-items-delete-btn');
+    const listEl       = document.getElementById('qa-items-list');
+    const listMsg      = document.getElementById('qa-items-list-msg');
+    const listLoading  = document.getElementById('qa-items-list-loading');
+    const detailMsg    = document.getElementById('qa-items-detail-msg');
+    const emptyState   = document.getElementById('qa-items-empty-state');
+    const formEl       = document.getElementById('qa-items-form');
+    const detailTitle  = document.getElementById('qa-items-detail-title');
+    const submitBtn    = document.getElementById('qa-items-submit-btn');
+    const deleteBtn    = document.getElementById('qa-items-delete-btn');
     const deleteDialog = document.getElementById('qa-items-delete-dialog');
 
-    // ---- ユーティリティは admin.js の window.showMsg / window.escapeHtml を使用 ----
-
-    // ---- 一覧読み込み ----
     async function loadList() {
       listLoading.style.display = 'block';
       listEl.innerHTML = '';
@@ -186,45 +189,39 @@
     function renderList() {
       listEl.innerHTML = '';
       if (!records.length) {
-        listEl.innerHTML = '<li class="record-list__empty">Q&amp;A項目がありません。「＋ 新規追加」から追加できます。</li>';
+        listEl.innerHTML = '<li style="padding:24px;text-align:center;color:#9ca3af;font-size:0.9rem;">Q&amp;A項目がありません</li>';
         return;
       }
       records.forEach((record) => {
         const li = document.createElement('li');
-        li.className = 'record-item' + (record.id === editingId ? ' selected' : '');
-        li.dataset.id = record.id;
+        li.className = 'qa-item-row' + (record.id === editingId ? ' selected' : '');
         const pubLabel = record.published ? '公開' : '非公開';
-        const pubClass = record.published ? 'record-item__published' : 'record-item__published record-item__published--hidden';
-        li.innerHTML = `
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-            <span class="record-item__badge record-item__badge--neutral">${escapeHtml(record.tag)}</span>
-            <span class="${pubClass}">${pubLabel}</span>
-            <span style="font-size:0.78rem;color:#9ca3af;">順: ${record.sort_order}</span>
-          </div>
-          <span class="record-item__title" style="margin-top:4px;">${escapeHtml(record.question)}</span>
-        `;
+        const pubCls = 'qa-item-row__pub' + (record.published ? '' : ' qa-item-row__pub--hidden');
+        li.innerHTML = '<div class="qa-item-row__meta">'
+          + '<span class="qa-item-row__tag">' + escapeHtml(record.tag) + '</span>'
+          + '<span class="' + pubCls + '">' + pubLabel + '</span>'
+          + '<span class="qa-item-row__order">順: ' + record.sort_order + '</span>'
+          + '</div>'
+          + '<div class="qa-item-row__question">' + escapeHtml(record.question) + '</div>';
         li.addEventListener('click', () => fillForm(record));
         listEl.appendChild(li);
       });
     }
 
-    // ---- フォーム操作 ----
     function fillForm(record) {
       isNewMode = false;
       editingId = record.id;
-      detailTitle.textContent = 'Q&amp;Aを編集';
+      detailTitle.textContent = 'Q&Aを編集';
       emptyState.hidden = true;
       formEl.hidden = false;
       deleteBtn.hidden = false;
       submitBtn.textContent = '💾 保存';
-
       document.getElementById('qa-items-id').value = record.id;
       document.getElementById('qa-items-sort-order').value = record.sort_order ?? 100;
       document.getElementById('qa-items-tag').value = record.tag ?? '';
       document.getElementById('qa-items-question').value = record.question ?? '';
       document.getElementById('qa-items-answer').value = record.answer ?? '';
       document.getElementById('qa-items-published').checked = !!record.published;
-
       renderList();
       detailMsg.textContent = '';
       detailMsg.className = 'msg';
@@ -233,7 +230,7 @@
     function openNewForm() {
       isNewMode = true;
       editingId = null;
-      detailTitle.textContent = '新しいQ&amp;Aを追加';
+      detailTitle.textContent = '新しいQ&Aを追加';
       emptyState.hidden = true;
       formEl.hidden = false;
       deleteBtn.hidden = true;
@@ -259,23 +256,18 @@
       detailMsg.className = 'msg';
     }
 
-    // ---- フォーム送信（新規 or 更新） ----
     formEl.addEventListener('submit', async (event) => {
       event.preventDefault();
-
-      const tag = document.getElementById('qa-items-tag').value.trim();
-      const question = document.getElementById('qa-items-question').value.trim();
-      const answer = document.getElementById('qa-items-answer').value.trim();
+      const tag        = document.getElementById('qa-items-tag').value.trim();
+      const question   = document.getElementById('qa-items-question').value.trim();
+      const answer     = document.getElementById('qa-items-answer').value.trim();
       const sort_order = parseInt(document.getElementById('qa-items-sort-order').value, 10) || 100;
-      const published = document.getElementById('qa-items-published').checked;
-
+      const published  = document.getElementById('qa-items-published').checked;
       if (!tag || !question || !answer) {
         showMsg(detailMsg, 'タグ・質問・回答はすべて必須です', 'error');
         return;
       }
-
       const data = { tag, question, answer, sort_order, published };
-
       try {
         submitBtn.disabled = true;
         if (isNewMode) {
@@ -290,7 +282,7 @@
             submitBtn.textContent = '💾 保存';
             document.getElementById('qa-items-id').value = newRecord.id;
           }
-          showMsg(detailMsg, 'Q&amp;Aを追加しました', 'success');
+          showMsg(detailMsg, 'Q&Aを追加しました', 'success');
         } else {
           await updateRecord(TABLE, editingId, data);
           const idx = records.findIndex((r) => r.id === editingId);
@@ -308,11 +300,7 @@
       }
     });
 
-    // ---- 削除 ----
-    deleteBtn.addEventListener('click', () => {
-      if (!editingId) return;
-      deleteDialog.hidden = false;
-    });
+    deleteBtn.addEventListener('click', () => { if (!editingId) return; deleteDialog.hidden = false; });
 
     document.getElementById('qa-items-delete-confirm').addEventListener('click', async () => {
       deleteDialog.hidden = true;
@@ -327,15 +315,10 @@
       }
     });
 
-    document.getElementById('qa-items-delete-cancel').addEventListener('click', () => {
-      deleteDialog.hidden = true;
-    });
-
-    // ---- ボタン ----
+    document.getElementById('qa-items-delete-cancel').addEventListener('click', () => { deleteDialog.hidden = true; });
     document.getElementById('qa-items-new-btn').addEventListener('click', openNewForm);
     document.getElementById('qa-items-cancel-btn').addEventListener('click', resetForm);
 
-    // ---- 初期化 ----
     window.adminAuthReady.then(loadList);
   </script>
 
