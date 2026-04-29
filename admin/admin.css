@@ -537,6 +537,9 @@ body {
   .admin-login-card { padding: 22px; }
 }
 
+/* hidden 属性が CSS display プロパティに上書きされないようにする */
+[hidden] { display: none !important; }
+
 /* ---- 確認ダイアログ ---- */
 .dialog-overlay {
   position: fixed;

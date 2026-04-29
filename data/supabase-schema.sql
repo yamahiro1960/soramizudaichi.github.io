@@ -310,6 +310,11 @@ create policy "dev anon write qa_items"
 on public.qa_items for all to anon
 using (true) with check (true);
 
+drop policy if exists "admins manage qa_items" on public.qa_items;
+create policy "admins manage qa_items"
+on public.qa_items for all to authenticated
+using (true) with check (true);
+
 grant insert, update, delete on table public.qa_items to anon;
 
 create index if not exists idx_qa_items_sort

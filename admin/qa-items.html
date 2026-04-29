@@ -167,24 +167,7 @@
     const deleteBtn = document.getElementById('qa-items-delete-btn');
     const deleteDialog = document.getElementById('qa-items-delete-dialog');
 
-    // ---- ユーティリティ ----
-    function escapeHtml(str) {
-      if (str == null) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function showMsg(el, text, type) {
-      if (!el) return;
-      el.textContent = text;
-      el.className = 'msg msg--' + type;
-      if (type === 'success') {
-        setTimeout(() => { el.textContent = ''; el.className = 'msg'; }, 3000);
-      }
-    }
+    // ---- ユーティリティは admin.js の window.showMsg / window.escapeHtml を使用 ----
 
     // ---- 一覧読み込み ----
     async function loadList() {
