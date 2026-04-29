@@ -390,29 +390,146 @@ loadFarmFromJson();
 // ─── Q&A ─────────────────────────────────────────────────────────────────────
 
 const qaBandList = document.querySelector('.qa-band-list[data-qa-source]');
+const qaSearchInput = document.querySelector('#qa-search-input');
+const qaSearchClear = document.querySelector('.qa-search__clear');
 
-const renderQaItems = (items) => {
+let qaAllItems = []; // 全件キャッシュ（検索フィルター用）
+
+// ── テキスト正規化（全角→半角、カタカナ→ひらがな、小文字化）
+const normalizeText = (text) => {
+  if (typeof text !== 'string') return '';
+  return text
+    .toLowerCase()
+    .replace(/[Ａ-Ｚａ-ｚ０-９！-～]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0xFEE0))
+    .replace(/[\u30A1-\u30F6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60));
+};
+
+// ── クエリをトークン分割（全角・半角スペース対応）
+const getTokens = (query) =>
+  normalizeText(query).split(/[\s\u3000]+/).filter((t) => t.length > 0);
+
+// ── アイテムがすべてのトークンにマッチするか（AND検索）
+const itemMatchesTokens = (item, tokens) => {
+  const haystack = normalizeText(`${item.tag} ${item.question} ${item.answer}`);
+  return tokens.every((token) => haystack.includes(token));
+};
+
+// ── マッチ箇所をハイライト（XSS対策: escapeHtml後に置換）
+const highlightText = (text, tokens) => {
+  const safe = escapeHtml(text);
+  if (!tokens.length) return safe;
+  let result = safe;
+  tokens.forEach((token) => {
+    const safeToken = escapeHtml(token).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(safeToken, 'gi');
+    result = result.replace(re, (m) => `<mark class="qa-highlight">${m}</mark>`);
+  });
+  return result;
+};
+
+// ── Q&Aアイテムをレンダリング
+const renderQaItems = (items, tokens = []) => {
   const sorted = items.slice().sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999));
   return sorted.map((item, index) => `
-    <details class="qa-band"${index === 0 ? ' open' : ''}>
+    <details class="qa-band"${index === 0 && !tokens.length ? ' open' : ''}>
       <summary>
         <span class="qa-band__tag">${escapeHtml(item.tag)}</span>
-        <span class="qa-band__question">${escapeHtml(item.question)}</span>
+        <span class="qa-band__question">${highlightText(item.question, tokens)}</span>
       </summary>
-      <div class="qa-band__answer"><p>${escapeHtml(item.answer)}</p></div>
+      <div class="qa-band__answer"><p>${highlightText(item.answer, tokens)}</p></div>
     </details>
   `).join('');
 };
 
-const loadQaFromSupabase = async () => {
-  if (!qaBandList) {
-    return false;
+// ── 検索結果なしメッセージ
+const renderQaNoResults = (query) => `
+  <div class="qa-no-results" role="status" aria-live="polite">
+    <p class="qa-no-results__icon">🔍</p>
+    <p class="qa-no-results__title">「${escapeHtml(query)}」に一致する質問が見つかりませんでした</p>
+    <p class="qa-no-results__message">
+      別のキーワードをお試しください。<br>
+      いただいた検索内容はQ&amp;Aの充実に活用させていただきます。<br>
+      ご不明な点はお気軽にお問い合わせください。
+    </p>
+  </div>
+`;
+
+// ── 検索ログをSupabaseに保存（fire-and-forget）
+const saveSearchLog = async (queryText, hitCount) => {
+  const config = window.SUPABASE_CONFIG;
+  if (!config || !config.enabled || !config.url || !config.anonKey) return;
+  try {
+    await fetch(`${config.url}/rest/v1/search_logs`, {
+      method: 'POST',
+      headers: {
+        apikey: config.anonKey,
+        Authorization: `Bearer ${config.anonKey}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ query_text: queryText, hit_count: hitCount })
+    });
+  } catch (_) {
+    // 保存失敗は無視
+  }
+};
+
+// ── 検索フィルター適用
+const applyQaSearch = (rawQuery) => {
+  if (!qaBandList) return;
+  const tokens = getTokens(rawQuery);
+
+  if (!tokens.length) {
+    qaBandList.innerHTML = renderQaItems(qaAllItems);
+    if (qaSearchClear) qaSearchClear.hidden = true;
+    return;
   }
 
-  const config = window.SUPABASE_CONFIG;
-  if (!config || !config.enabled || !config.url || !config.anonKey) {
-    return false;
+  if (qaSearchClear) qaSearchClear.hidden = false;
+  const matched = qaAllItems.filter((item) => itemMatchesTokens(item, tokens));
+
+  if (matched.length === 0) {
+    qaBandList.innerHTML = renderQaNoResults(rawQuery.trim());
+  } else {
+    qaBandList.innerHTML = renderQaItems(matched, tokens);
   }
+};
+
+// ── 検索入力イベント（デバウンス付きDB保存）
+let searchSaveTimer = null;
+
+if (qaSearchInput) {
+  qaSearchInput.addEventListener('input', () => {
+    const query = qaSearchInput.value;
+    applyQaSearch(query);
+
+    clearTimeout(searchSaveTimer);
+    if (query.trim().length >= 2) {
+      searchSaveTimer = setTimeout(() => {
+        const tokens = getTokens(query);
+        const hitCount = qaAllItems.filter((item) => itemMatchesTokens(item, tokens)).length;
+        saveSearchLog(query.trim(), hitCount);
+      }, 1200);
+    }
+  });
+}
+
+if (qaSearchClear) {
+  qaSearchClear.addEventListener('click', () => {
+    if (qaSearchInput) {
+      qaSearchInput.value = '';
+      qaSearchInput.focus();
+    }
+    applyQaSearch('');
+  });
+}
+
+// ── Supabaseからデータ取得
+const loadQaFromSupabase = async () => {
+  if (!qaBandList) return false;
+
+  const config = window.SUPABASE_CONFIG;
+  if (!config || !config.enabled || !config.url || !config.anonKey) return false;
 
   const table = qaBandList.dataset.qaTable || 'qa_items';
   const cols = 'id,sort_order,tag,question,answer,published';
@@ -429,46 +546,37 @@ const loadQaFromSupabase = async () => {
     }
   });
 
-  if (!response.ok) {
-    throw new Error(`Q&A Supabase responded with ${response.status}`);
-  }
+  if (!response.ok) throw new Error(`Q&A Supabase responded with ${response.status}`);
 
   const rows = await response.json();
-  const items = rows.map((row) => ({
+  qaAllItems = rows.map((row) => ({
     sortOrder: row.sort_order,
     tag: row.tag,
     question: row.question,
     answer: row.answer
   }));
 
-  qaBandList.innerHTML = renderQaItems(items);
+  qaBandList.innerHTML = renderQaItems(qaAllItems);
   return true;
 };
 
+// ── JSONフォールバック含むデータロード
 const loadQaData = async () => {
-  if (!qaBandList) {
-    return;
-  }
+  if (!qaBandList) return;
 
   const source = qaBandList.dataset.qaSource;
-  if (!source) {
-    return;
-  }
+  if (!source) return;
 
   try {
     const loadedFromSupabase = await loadQaFromSupabase();
-    if (loadedFromSupabase) {
-      return;
-    }
+    if (loadedFromSupabase) return;
 
     const response = await fetch(source, { cache: 'no-store' });
-    if (!response.ok) {
-      throw new Error(`Failed to load Q&A data JSON: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Failed to load Q&A data JSON: ${response.status}`);
 
     const data = await response.json();
-    const items = Array.isArray(data.items) ? data.items : [];
-    qaBandList.innerHTML = renderQaItems(items);
+    qaAllItems = Array.isArray(data.items) ? data.items : [];
+    qaBandList.innerHTML = renderQaItems(qaAllItems);
   } catch (error) {
     console.warn('Q&A data could not be loaded. Keeping static HTML fallback.', error);
   }

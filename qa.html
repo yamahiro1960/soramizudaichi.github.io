@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Q&amp;A | 空と水と大地合同会社</title>
   <meta name="description" content="八升豆のよくあるご質問をまとめたページです。">
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/images/home/smdimg.png" type="image/png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
   <header class="site-header" id="top">
     <div class="site-header__inner">
       <a class="site-brand" href="index.html" aria-label="空と水と大地合同会社のホームへ移動">
-        <img class="site-brand__logo" src="assets/images/logo.svg" alt="" aria-hidden="true">
+        <img class="site-brand__logo" src="assets/images/home/smdimg.png" alt="" aria-hidden="true">
         <span class="site-brand__text">空と水と大地合同会社</span>
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -39,7 +39,19 @@
       <div class="page-hero__content shell">
         <p class="eyebrow">Q&amp;A</p>
         <h1>よくあるご質問</h1>
-        <p>元サイトのQ&amp;Aページにある質問を、内容ごとに整理して掲載しています。</p>
+
+      </div>
+    </section>
+    <section class="section shell">
+      <div class="qa-search">
+        <label class="qa-search__label" for="qa-search-input">キーワードで探す</label>
+        <div class="qa-search__field">
+          <input class="qa-search__input" id="qa-search-input" type="search"
+                 placeholder="例：保存方法、賞味期限、飲み方…"
+                 autocomplete="off" aria-label="Q&amp;A検索">
+          <button class="qa-search__clear" type="button" aria-label="検索をクリア" hidden>×</button>
+        </div>
+        <p class="qa-search__hint">気になるキーワードを入力すると該当する質問を絞り込みます</p>
       </div>
     </section>
     <section class="section shell">

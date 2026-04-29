@@ -1146,6 +1146,116 @@ button {
   color: var(--muted);
 }
 
+/* ─── Q&A 検索ボックス ─────────────────────────────────────── */
+
+.qa-search {
+  max-width: 640px;
+  margin: 0 auto 8px;
+}
+
+.qa-search__label {
+  display: block;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.qa-search__field {
+  position: relative;
+}
+
+.qa-search__input {
+  width: 100%;
+  padding: 14px 48px 14px 20px;
+  border: 2px solid var(--accent-soft);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 1rem;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.qa-search__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(32, 77, 54, 0.1);
+}
+
+.qa-search__input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.qa-search__clear {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--accent-soft);
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  cursor: pointer;
+  color: var(--accent);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.qa-search__clear:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.qa-search__hint {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ─── Q&A 検索結果なし ─────────────────────────────────────── */
+
+.qa-no-results {
+  text-align: center;
+  padding: 52px 24px;
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+}
+
+.qa-no-results__icon {
+  font-size: 2.6rem;
+  margin: 0 0 14px;
+}
+
+.qa-no-results__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 12px;
+}
+
+.qa-no-results__message {
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.8;
+}
+
+/* ─── Q&A 検索ハイライト ───────────────────────────────────── */
+
+mark.qa-highlight {
+  background: rgba(210, 167, 60, 0.32);
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
 .farm-log {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
