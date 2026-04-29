@@ -131,15 +131,14 @@ button {
 }
 
 .site-brand__mark {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
+  display: none;
+}
+
+.site-brand__logo {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
   border-radius: 50%;
-  background: linear-gradient(135deg, #2e6a48, #d67a35);
-  color: #fff;
-  font-family: "Yu Mincho", "Hiragino Mincho ProN", serif;
-  font-weight: 700;
 }
 
 .site-brand__text {
@@ -1331,6 +1330,20 @@ button {
 .first-step__card .button {
   justify-self: start;
   margin-top: 6px;
+}
+
+.company-name-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.35rem;
+}
+
+.company-name-logo {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
 }
 
 .company-data {

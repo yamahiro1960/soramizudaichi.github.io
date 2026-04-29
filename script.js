@@ -386,3 +386,92 @@ const loadFarmFromJson = async () => {
 };
 
 loadFarmFromJson();
+
+// ─── Q&A ─────────────────────────────────────────────────────────────────────
+
+const qaBandList = document.querySelector('.qa-band-list[data-qa-source]');
+
+const renderQaItems = (items) => {
+  const sorted = items.slice().sort((a, b) => (a.sortOrder ?? 9999) - (b.sortOrder ?? 9999));
+  return sorted.map((item, index) => `
+    <details class="qa-band"${index === 0 ? ' open' : ''}>
+      <summary>
+        <span class="qa-band__tag">${escapeHtml(item.tag)}</span>
+        <span class="qa-band__question">${escapeHtml(item.question)}</span>
+      </summary>
+      <div class="qa-band__answer"><p>${escapeHtml(item.answer)}</p></div>
+    </details>
+  `).join('');
+};
+
+const loadQaFromSupabase = async () => {
+  if (!qaBandList) {
+    return false;
+  }
+
+  const config = window.SUPABASE_CONFIG;
+  if (!config || !config.enabled || !config.url || !config.anonKey) {
+    return false;
+  }
+
+  const table = qaBandList.dataset.qaTable || 'qa_items';
+  const cols = 'id,sort_order,tag,question,answer,published';
+  const endpoint = `${config.url}/rest/v1/${table}` +
+    `?select=${encodeURIComponent(cols)}` +
+    `&published=eq.true` +
+    `&order=sort_order.asc,id.asc`;
+
+  const response = await fetch(endpoint, {
+    headers: {
+      apikey: config.anonKey,
+      Authorization: `Bearer ${config.anonKey}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error(`Q&A Supabase responded with ${response.status}`);
+  }
+
+  const rows = await response.json();
+  const items = rows.map((row) => ({
+    sortOrder: row.sort_order,
+    tag: row.tag,
+    question: row.question,
+    answer: row.answer
+  }));
+
+  qaBandList.innerHTML = renderQaItems(items);
+  return true;
+};
+
+const loadQaData = async () => {
+  if (!qaBandList) {
+    return;
+  }
+
+  const source = qaBandList.dataset.qaSource;
+  if (!source) {
+    return;
+  }
+
+  try {
+    const loadedFromSupabase = await loadQaFromSupabase();
+    if (loadedFromSupabase) {
+      return;
+    }
+
+    const response = await fetch(source, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load Q&A data JSON: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const items = Array.isArray(data.items) ? data.items : [];
+    qaBandList.innerHTML = renderQaItems(items);
+  } catch (error) {
+    console.warn('Q&A data could not be loaded. Keeping static HTML fallback.', error);
+  }
+};
+
+loadQaData();
