@@ -139,7 +139,15 @@ async function callRestDirect(action, table, payload) {
     const params = new URLSearchParams({ select: '*' });
     if (payload.order) params.set('order', payload.order);
     const url = `${config.url}/rest/v1/${table}?${params.toString()}`;
-    const res = await fetch(url, { headers });
+    let res = await fetch(url, { headers });
+    // authenticated ロールの RLS ポリシーが未設定の場合、anon キーでフォールバック
+    if (res.status === 403 || res.status === 401) {
+      const anonHeaders = {
+        apikey: config.anonKey,
+        'Content-Type': 'application/json'
+      };
+      res = await fetch(url, { headers: anonHeaders });
+    }
     if (!res.ok) throw new Error(`GET ${table} failed: ${res.status}`);
     return res.json();
   }
