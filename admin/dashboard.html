@@ -93,6 +93,7 @@
         <a class="dashboard-card" href="qa-logs.html">
           <div class="dashboard-card__icon">🔎</div>
           <div class="dashboard-card__title">Q&amp;A検索ログ</div>
+          <div class="dashboard-card__meta" id="qa-logs-summary" aria-live="polite">未確認件数を集計中...</div>
           <div class="dashboard-card__desc">ユーザーがQ&amp;Aで検索したキーワードと確認状況を確認します。</div>
           <div class="dashboard-card__arrow">ログを確認する →</div>
         </a>
@@ -103,6 +104,39 @@
 
   <script src="../data/supabase-config.js"></script>
   <script src="admin.js"></script>
+  <script>
+    async function loadQaLogsSummary() {
+      const summaryEl = document.getElementById('qa-logs-summary');
+      if (!summaryEl) return;
+
+      try {
+        const records = await fetchRecords('qa_logs', 'confirmed.asc,searched_at.desc,id.desc');
+        const safeRecords = Array.isArray(records) ? records : [];
+        const pendingCount = safeRecords.filter((record) => !record.confirmed).length;
+        const totalCount = safeRecords.length;
+
+        if (!totalCount) {
+          summaryEl.textContent = 'ログはまだありません';
+          summaryEl.className = 'dashboard-card__meta dashboard-card__meta--neutral';
+          return;
+        }
+
+        if (!pendingCount) {
+          summaryEl.textContent = `全${totalCount}件を確認済み`;
+          summaryEl.className = 'dashboard-card__meta dashboard-card__meta--ok';
+          return;
+        }
+
+        summaryEl.textContent = `未確認 ${pendingCount}件 / 全${totalCount}件`;
+        summaryEl.className = 'dashboard-card__meta dashboard-card__meta--warn';
+      } catch (_) {
+        summaryEl.textContent = '件数を取得できませんでした';
+        summaryEl.className = 'dashboard-card__meta dashboard-card__meta--neutral';
+      }
+    }
+
+    window.adminAuthReady.then(loadQaLogsSummary);
+  </script>
 
 </body>
 </html>

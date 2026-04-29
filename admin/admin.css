@@ -188,6 +188,26 @@ body {
   font-size: 1.15rem;
   font-weight: 700;
 }
+.dashboard-card__meta {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.dashboard-card__meta--warn {
+  background: #fff3cd;
+  color: #7a5a00;
+}
+.dashboard-card__meta--ok {
+  background: #d4edda;
+  color: #155724;
+}
+.dashboard-card__meta--neutral {
+  background: #e9ecef;
+  color: #495057;
+}
 .dashboard-card__desc {
   font-size: 0.85rem;
   color: var(--admin-text-sub);

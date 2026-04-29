@@ -459,7 +459,7 @@ const saveSearchLog = async (queryText, hitCount) => {
   const config = window.SUPABASE_CONFIG;
   if (!config || !config.enabled || !config.url || !config.anonKey) return;
   try {
-    await fetch(`${config.url}/rest/v1/qa_logs`, {
+    const response = await fetch(`${config.url}/rest/v1/qa_logs`, {
       method: 'POST',
       headers: {
         apikey: config.anonKey,
@@ -469,8 +469,13 @@ const saveSearchLog = async (queryText, hitCount) => {
       },
       body: JSON.stringify({ query_text: queryText, hit_count: hitCount })
     });
-  } catch (_) {
-    // 保存失敗は無視
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => '');
+      console.warn('Q&A search log could not be saved.', response.status, errorText);
+    }
+  } catch (error) {
+    console.warn('Q&A search log request failed.', error);
   }
 };
 
