@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理者ログイン | 空と水と大地合同会社</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main class="admin-login-main">
+    <section class="admin-login-card">
+      <h1>管理者ログイン</h1>
+      <p>管理画面を開くには認証が必要です。</p>
+
+      <div id="login-msg" class="msg"></div>
+
+      <form id="login-form" class="admin-form" novalidate>
+        <div class="form-group">
+          <label for="login-email">メールアドレス</label>
+          <input type="email" id="login-email" autocomplete="username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">パスワード</label>
+          <input type="password" id="login-password" autocomplete="current-password" required>
+        </div>
+
+        <button type="submit" class="btn btn--primary btn--full" id="login-submit">ログイン</button>
+      </form>
+
+      <a class="admin-login-back" href="../index.html">← サイトトップに戻る</a>
+    </section>
+  </main>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const form = document.getElementById('login-form');
+    const msg = document.getElementById('login-msg');
+    const submitBtn = document.getElementById('login-submit');
+
+    function getNextPath() {
+      const params = new URLSearchParams(window.location.search);
+      const next = (params.get('next') || 'dashboard.html').trim();
+      if (!next || next.includes('http://') || next.includes('https://') || next.startsWith('/')) {
+        return 'dashboard.html';
+      }
+      return next;
+    }
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+
+      if (!email || !password) {
+        showMsg(msg, 'メールアドレスとパスワードを入力してください。', 'error');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'ログイン中...';
+
+      try {
+        await adminSignIn(email, password);
+        window.location.replace(getNextPath());
+      } catch (err) {
+        showMsg(msg, 'ログインに失敗しました: ' + err.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ログイン';
+      }
+    });
+  </script>
+</body>
+</html>
