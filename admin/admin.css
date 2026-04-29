@@ -262,11 +262,57 @@ body {
 }
 .record-item__badge--pub { background: #d4edda; color: #155724; }
 .record-item__badge--draft { background: #e2e3e5; color: #383d41; }
+.record-item__badge--ok { background: #d4edda; color: #155724; }
+.record-item__badge--pending { background: #fff3cd; color: #7a5a00; }
 .record-list__empty {
   text-align: center;
   padding: 32px;
   color: var(--admin-text-sub);
   font-size: 0.88rem;
+}
+
+.admin-detail {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-detail__row {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-detail__label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--admin-text-sub);
+  letter-spacing: 0.04em;
+}
+
+.admin-detail__value {
+  font-size: 0.94rem;
+  color: var(--admin-text);
+  word-break: break-word;
+}
+
+.admin-detail__value--mono {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.84rem;
+}
+
+.admin-detail__box {
+  padding: 14px;
+  background: #f9fbf9;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  line-height: 1.7;
+}
+
+.form-toggle--compact {
+  margin-top: 4px;
+}
+
+.form-toggle--compact span {
+  font-weight: 600;
 }
 
 /* ---- フォーム ---- */

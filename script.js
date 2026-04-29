@@ -459,7 +459,7 @@ const saveSearchLog = async (queryText, hitCount) => {
   const config = window.SUPABASE_CONFIG;
   if (!config || !config.enabled || !config.url || !config.anonKey) return;
   try {
-    await fetch(`${config.url}/rest/v1/search_logs`, {
+    await fetch(`${config.url}/rest/v1/qa_logs`, {
       method: 'POST',
       headers: {
         apikey: config.anonKey,

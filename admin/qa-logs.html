@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Q&amp;A検索ログ 管理 | 空と水と大地合同会社</title>
+  <link rel="icon" href="../assets/images/home/smdimg.png" type="image/png">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+  <header class="admin-header">
+    <a class="admin-header__logo" href="dashboard.html">
+      ⚙ 管理者画面
+      <span>空と水と大地合同会社</span>
+    </a>
+    <div class="admin-header__spacer"></div>
+    <a class="admin-header__site-link" href="../qa.html" target="_blank">← Q&amp;Aページを表示</a>
+  </header>
+
+  <aside class="admin-sidebar">
+    <nav class="admin-nav">
+      <p class="admin-nav__label">メニュー</p>
+      <a href="dashboard.html"><span class="nav-icon">🏠</span> ダッシュボード</a>
+      <p class="admin-nav__label">データ管理</p>
+      <a href="farm.html"><span class="nav-icon">🌿</span> 圃場情報</a>
+      <a href="research.html"><span class="nav-icon">🔬</span> 研究情報</a>
+      <a href="enjoy.html"><span class="nav-icon">🍵</span> 楽しみ方</a>
+      <a href="product.html"><span class="nav-icon">📦</span> 商品</a>
+      <a href="qa-logs.html" class="active"><span class="nav-icon">🔎</span> Q&amp;A検索ログ</a>
+    </nav>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-content">
+      <div class="dev-banner">
+        ⚠️ <strong>開発モード：</strong>認証は現在無効化されています。本番公開前に認証機能を有効化してください。
+      </div>
+
+      <div class="admin-page-title">
+        <h1>🔎 Q&amp;A検索ログ</h1>
+        <p>ユーザーが検索したキーワードと、確認済みかどうかを管理します</p>
+      </div>
+
+      <div class="admin-layout">
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2>検索ログ一覧</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="qa-logs-list-msg" class="msg"></div>
+            <div id="qa-logs-list-loading" class="loading-indicator">読み込み中...</div>
+            <ul class="record-list" id="qa-logs-list"></ul>
+          </div>
+        </div>
+
+        <div class="admin-panel">
+          <div class="admin-panel__head">
+            <h2 id="qa-logs-detail-title">ログ詳細</h2>
+          </div>
+          <div class="admin-panel__body">
+            <div id="qa-logs-detail-msg" class="msg"></div>
+            <div class="admin-detail" id="qa-logs-empty-state">
+              <p class="record-list__empty">左の一覧からログを選択してください</p>
+            </div>
+            <form class="admin-form" id="qa-logs-form" novalidate hidden>
+              <input type="hidden" id="qa-logs-id">
+
+              <div class="admin-detail">
+                <div class="admin-detail__row">
+                  <div class="admin-detail__label">検索キーワード</div>
+                  <div class="admin-detail__value admin-detail__box" id="qa-logs-query-text"></div>
+                </div>
+
+                <div class="form-row">
+                  <div class="admin-detail__row">
+                    <div class="admin-detail__label">ヒット件数</div>
+                    <div class="admin-detail__value" id="qa-logs-hit-count"></div>
+                  </div>
+                  <div class="admin-detail__row">
+                    <div class="admin-detail__label">検索日時</div>
+                    <div class="admin-detail__value admin-detail__value--mono" id="qa-logs-searched-at"></div>
+                  </div>
+                </div>
+
+                <label class="form-toggle form-toggle--compact">
+                  <input type="checkbox" id="qa-logs-confirmed">
+                  <span>確認済みにする</span>
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn btn--primary">💾 確認状態を保存</button>
+                <button type="button" class="btn btn--ghost" id="qa-logs-reset">選択を解除</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../data/supabase-config.js"></script>
+  <script src="admin.js"></script>
+  <script>
+    const TABLE = 'qa_logs';
+    let records = [];
+    let editingId = null;
+
+    const listEl = document.getElementById('qa-logs-list');
+    const listMsg = document.getElementById('qa-logs-list-msg');
+    const listLoading = document.getElementById('qa-logs-list-loading');
+    const detailMsg = document.getElementById('qa-logs-detail-msg');
+    const emptyState = document.getElementById('qa-logs-empty-state');
+    const formEl = document.getElementById('qa-logs-form');
+    const detailTitle = document.getElementById('qa-logs-detail-title');
+
+    function formatDateTime(value) {
+      if (!value) return '-';
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return value;
+      return new Intl.DateTimeFormat('ja-JP', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).format(date);
+    }
+
+    async function loadList() {
+      listLoading.style.display = 'block';
+      listEl.innerHTML = '';
+      try {
+        records = await fetchRecords(TABLE, 'confirmed.asc,searched_at.desc,id.desc');
+        renderList();
+      } catch (e) {
+        showMsg(listMsg, '読み込みエラー: ' + e.message, 'error');
+      } finally {
+        listLoading.style.display = 'none';
+      }
+    }
+
+    function renderList() {
+      listEl.innerHTML = '';
+      if (!records.length) {
+        listEl.innerHTML = '<li class="record-list__empty">ログがありません</li>';
+        return;
+      }
+
+      records.forEach((record) => {
+        const li = document.createElement('li');
+        li.className = 'record-item' + (record.id === editingId ? ' selected' : '');
+        li.dataset.id = record.id;
+        li.innerHTML = `
+          <span class="record-item__title">${escapeHtml(record.query_text)}</span>
+          <span class="record-item__meta">${escapeHtml(formatDateTime(record.searched_at))}</span>
+          <span class="record-item__badge record-item__badge--${record.confirmed ? 'ok' : 'pending'}">${record.confirmed ? '確認済み' : '未確認'}</span>
+        `;
+        li.addEventListener('click', () => fillDetail(record));
+        listEl.appendChild(li);
+      });
+    }
+
+    function fillDetail(record) {
+      editingId = record.id;
+      detailTitle.textContent = 'ログ詳細を確認';
+      emptyState.hidden = true;
+      formEl.hidden = false;
+      document.getElementById('qa-logs-id').value = record.id;
+      document.getElementById('qa-logs-query-text').innerHTML = escapeHtml(record.query_text || '-');
+      document.getElementById('qa-logs-hit-count').textContent = String(record.hit_count ?? 0);
+      document.getElementById('qa-logs-searched-at').textContent = formatDateTime(record.searched_at);
+      document.getElementById('qa-logs-confirmed').checked = !!record.confirmed;
+      renderList();
+    }
+
+    function resetDetail() {
+      editingId = null;
+      detailTitle.textContent = 'ログ詳細';
+      emptyState.hidden = false;
+      formEl.hidden = true;
+      formEl.reset();
+      renderList();
+    }
+
+    formEl.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!editingId) return;
+      try {
+        const confirmed = document.getElementById('qa-logs-confirmed').checked;
+        await updateRecord(TABLE, editingId, { confirmed });
+        const target = records.find((record) => record.id === editingId);
+        if (target) target.confirmed = confirmed;
+        showMsg(detailMsg, '確認状態を更新しました', 'success');
+        renderList();
+      } catch (e) {
+        showMsg(detailMsg, '保存エラー: ' + e.message, 'error');
+      }
+    });
+
+    document.getElementById('qa-logs-reset').addEventListener('click', resetDetail);
+
+    window.adminAuthReady.then(loadList);
+  </script>
+
+</body>
+</html>
