@@ -1,8 +1,18 @@
 name: Keep Supabase Alive
 
+# Supabase無料プランは一定期間アクセスが無いとプロジェクトが自動的に一時停止する。
+# それを防ぐための定期アクセス。
+#
+# 補足(2026-09-05): 1日1回・リトライ無しの実行が10日近く連続で失敗し続け、
+# 誰も気づかないまま実際にプロジェクトが一時停止していた事故が発生。
+# 一時停止してしまうと、この ping だけでは復帰できず、Supabaseダッシュボードの
+# 「Restore」操作が必要になる（"Restoration complete!" の画面が出れば復旧完了）。
+# 再発防止として、一過性の通信エラーを吸収するリトライと、失敗が連続しても
+# 本当の一時停止に至るまでの猶予を確保するための実行頻度アップを行った。
+
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */6 * * *'
   workflow_dispatch:
 
 jobs:
@@ -13,4 +23,5 @@ jobs:
         run: |
           curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}"
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            --retry 3 --retry-delay 10 --retry-connrefused --max-time 30
